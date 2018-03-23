@@ -1,0 +1,17 @@
+# depslib dependency file v1.0
+1521790691 source:/home/renjie/Fly/main.c
+	<stdio.h>
+	<stdlib.h>
+	<GL/glew.h>
+	<GL/freeglut.h>
+	<GL/gl.h>
+	"SGEngine.h"
+
+1521789923 /home/renjie/Fly/SGEngine.h
+
+1521796762 source:/home/renjie/Fly/Vector.c
+	<stdlib.h>
+	"Vector.h"
+
+1521807039 /home/renjie/Fly/Vector.h
+
