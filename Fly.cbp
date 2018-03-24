@@ -37,7 +37,10 @@
 			<Add option="-lGL" />
 			<Add option="-lGLEW" />
 		</Linker>
-		<Unit filename="SGEngine.h" />
+		<Unit filename="Engine.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Engine.h" />
 		<Unit filename="Vector.c">
 			<Option compilerVar="CC" />
 		</Unit>

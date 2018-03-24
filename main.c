@@ -5,6 +5,11 @@
 #include <GL/gl.h>
 #include "Engine.h"
 
+#define 				WND_W						400
+#define				WND_H						600
+
+Engine *pEngine;
+
 void Display()
 {
 	glClearColor(0,0,0,0);
@@ -19,7 +24,7 @@ int main(int argc,char *argv[])
 
 	glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGBA);
 
-	glutInitWindowSize(400,600);
+	glutInitWindowSize(WND_W,WND_H);
 	glutCreateWindow("Fly");
 
 	glutDisplayFunc(Display);
