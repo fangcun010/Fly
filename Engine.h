@@ -59,7 +59,6 @@ typedef struct tagEventManager                                  //事件管理�
 {
     Vector *pEventVt;                                               //事件向量
 
-
 } EventManager;
 
 typedef struct tagShader                                           //着色器
