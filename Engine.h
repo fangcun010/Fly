@@ -3,7 +3,13 @@
 
 #include "Vector.h"
 
+#define           TRUE              1
+#define           FALSE             0
+
+typedef int BOOL;
+
 typedef void (*Func) ();                                 //函数回调
+typedef int (*bFunc) ();
 
 typedef struct tagSprite                               //精灵
 {
@@ -20,7 +26,7 @@ typedef struct tagSpriteManager                      //精灵管理器
 typedef struct tagCallManager                        //回调管理器
 {
     Vector *pCallVt;                                     //回调向量
-}
+} CallManager;
 
 typedef struct tagTextureManager                     //纹理管理器
 {
@@ -76,9 +82,14 @@ typedef struct tagEngine                                          //引擎
     SceneManager *pSceneManager;                                 //场景管理器
     TextureManager *pTextureManager;                            //纹理管理器
     SoundManager *pSoundManager;                                 //声音管理器
+
+    Func WaitForFrameTime;                                         //等待刷新时间
+
+    BOOL bLeaveLoop;                                                 //是否跳出游戏循环
 } Engine;
 
 Engine *             CreateEngine();                              //创建引擎
 void                  DestoryEngine(Engine *pEngine);          //销毁引擎
+void                  WaitForFrameTime(Engine *pEngine);            //等待帧时间
 
 #endif // SGENGINE_H_INCLUDED

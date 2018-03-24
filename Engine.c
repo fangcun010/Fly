@@ -9,3 +9,8 @@ void DestoryEngine(Engine *pEngine)
 {
 
 }
+
+void WaitForFrameTime(Engine *pEngine)
+{
+
+}
