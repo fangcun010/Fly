@@ -57,9 +57,13 @@ int main(int argc,char *argv[])
 	{
         glutMainLoopEvent();
 
-       // if(pEngine->bLeaveLoop) break;
+        if(pEngine->bLeaveLoop) break;
 
-       // pEngine->WaitForFrameTime();
+
+
+        pEngine->WaitForFrameTime(pEngine);
+
+        glutSwapBuffers();
 	}
 
     return 0;
