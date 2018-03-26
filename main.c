@@ -30,6 +30,13 @@ void Display()
 	glutSwapBuffers();
 }
 
+void EngineInit()
+{
+    Vector *pVt=pEngine->pSceneManager->pSceneVt;
+
+    vtAddBack(pVt,CreateScene());
+}
+
 int main(int argc,char *argv[])
 {
 	glutInit(&argc,argv);
@@ -53,18 +60,24 @@ int main(int argc,char *argv[])
 
 	pEngine=CreateEngine();
 
+	EngineInit();
+
 	while(TRUE)
 	{
         glutMainLoopEvent();
 
         if(pEngine->bLeaveLoop) break;
 
-
+        pEngine->pSceneManager->DoCal(pEngine->pSceneManager);
+        pEngine->pSceneManager->DoDraw(pEngine->pSceneManager);
+        pEngine->pSceneManager->DoEvents(pEngine->pSceneManager);
 
         pEngine->WaitForFrameTime(pEngine);
 
         glutSwapBuffers();
 	}
+
+	DestoryEngine(pEngine);
 
     return 0;
 }

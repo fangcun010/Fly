@@ -36,6 +36,7 @@ SceneManager *CreateSceneManager()
 {
     SceneManager *pM=malloc(sizeof(SceneManager));
 
+    pM->pSceneVt=vtCreate();
     pM->DoCal=SceneManagerDoCal;
     pM->DoDraw=SceneManagerDoDraw;
     pM->DoEvents=SceneManagerDoEvents;
@@ -79,14 +80,78 @@ void DestorySceneManager(SceneManager *pM)
     free(pM);
 }
 
-TextureManager *CreateTextureManager()
+void SpriteDoCal(Sprite *pSprite)
 {
 
 }
 
-void DestoryTextureManager(TextureManager *pM)
+void SpriteDoDraw(Sprite *pSprite)
 {
 
+}
+
+void SpriteDoEvents(Sprite *pSprite)
+{
+
+}
+
+Sprite *CreateSprite()
+{
+    Sprite *pSprite=malloc(sizeof(Sprite));
+
+    pSprite->DoCal=SpriteDoCal;
+    pSprite->DoDraw=SpriteDoDraw;
+    pSprite->DoEvents=SpriteDoEvents;
+}
+
+void DestorySprite(Sprite *pSprite)
+{
+    free(pSprite);
+}
+
+Scene *CreateScene()
+{
+    Scene *pScene=malloc(sizeof(Scene));
+
+    pScene->DoCal=SceneDoCal;
+    pScene->DoDraw=SceneDoDraw;
+    pScene->DoEvents=SceneDoEvents;
+
+    return pScene;
+}
+
+void SceneDoCal(Scene *pScene)
+{
+
+}
+
+void SceneDoDraw(Scene *pScene)
+{
+
+}
+
+void SceneDoEvents(Scene *pScene)
+{
+
+}
+
+void DestoryScene(Scene *pScene)
+{
+    vtDestory(pScene->pSpriteVt);
+    free(pScene);
+}
+
+TextureManager *CreateTextureManager()
+{
+    TextureManager *pM=malloc(sizeof(TextureManager));
+
+    pM->pTextureVt=vtCreate();
+}
+
+void DestoryTextureManager(TextureManager *pM)
+{
+    vtDestory(pM->pTextureVt);
+    free(pM);
 }
 
 SoundManager *CreateSoundManager()

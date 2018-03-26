@@ -30,6 +30,12 @@ typedef struct tagCallManager                        //回调管理器
     Vector *pCallVt;                                     //回调向量
 } CallManager;
 
+typedef struct tagTexture
+{
+    int Width,Height;                                    //大小
+    unsigned int TexID;                                 //纹理ID
+} Texture;
+
 typedef struct tagTextureManager                     //纹理管理器
 {
     Vector *pTextureVt;                                  //纹理向量
@@ -100,6 +106,12 @@ void                  DestorySceneManager(SceneManager *pM);           //销毁�
 void                  SceneManagerDoCal(SceneManager *pM);             //计算
 void                  SceneManagerDoDraw(SceneManager *pM);            //绘制
 void                  SceneManagerDoEvents(SceneManager *pM);          //执行事件
+
+Scene *               CreateScene();                                         //创建场景
+void                  DestoryScene(Scene *pScene);                        //销毁场景
+void                  SceneDoCal(Scene *pScene);                           //场景计算
+void                  SceneDoDraw(Scene *pScene);                          //场景绘制
+void                  SceneDoEvents(Scene *pScene);                       //场景执行事件
 
 TextureManager *   CreateTextureManager();                             //创建纹理管理器
 void                  DestoryTextureManager(TextureManager *pM);     //销毁纹理管理器
