@@ -68,9 +68,7 @@ int main(int argc,char *argv[])
 
         if(pEngine->bLeaveLoop) break;
 
-        pEngine->pSceneManager->DoCal(pEngine->pSceneManager);
-        pEngine->pSceneManager->DoDraw(pEngine->pSceneManager);
-        pEngine->pSceneManager->DoEvents(pEngine->pSceneManager);
+        pEngine->DoScenes(pEngine);
 
         pEngine->WaitForFrameTime(pEngine);
 

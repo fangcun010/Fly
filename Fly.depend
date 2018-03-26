@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1522064595 source:/home/renjie/Fly/main.c
+1522068916 source:/home/renjie/Fly/main.c
 	<stdio.h>
 	<stdlib.h>
 	<GL/glew.h>
@@ -15,10 +15,10 @@
 
 1521808333 /home/renjie/Fly/Vector.h
 
-1522068058 /home/renjie/Fly/Engine.h
+1522068840 /home/renjie/Fly/Engine.h
 	"Vector.h"
 
-1522067512 source:/home/renjie/Fly/Engine.c
+1522068787 source:/home/renjie/Fly/Engine.c
 	"Engine.h"
 	<GL/gl.h>
 	<stdlib.h>
@@ -28,4 +28,9 @@
 	"MainMenu.h"
 
 1521872577 /home/renjie/Fly/MainMenu.h
+
+1522068245 source:/home/renjie/Fly/Game.c
+	"Game.h"
+
+1522068237 /home/renjie/Fly/Game.h
 

@@ -95,6 +95,7 @@ typedef struct tagEngine                                          //引擎
     SoundManager *pSoundManager;                                 //声音管理器
 
     ObjFunc WaitForFrameTime;                                     //等待刷新时间
+    ObjFunc DoScenes;                                               //执行场景操作
 
     unsigned long nLastFrameTime;                                //上一次
     BOOL bLeaveLoop;                                                //是否跳出游戏循环
@@ -102,6 +103,7 @@ typedef struct tagEngine                                          //引擎
 
 Engine *             CreateEngine();                                  //创建引擎
 void                  DestoryEngine(Engine *pEngine);             //销毁引擎
+void                  EngineDoScenes(Engine *pEngine);            //执行场景操作
 void                  WaitForFrameTime(Engine *pEngine);         //等待帧时间
 
 SceneManager *      CreateSceneManager();                                //创建场景管理器

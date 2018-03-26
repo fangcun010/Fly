@@ -14,6 +14,7 @@ Engine *CreateEngine()
     pEngine->pTextureManager=CreateTextureManager();
     pEngine->pSoundManager=CreateSoundManager();
 
+    pEngine->DoScenes=EngineDoScenes;
     pEngine->WaitForFrameTime=WaitForFrameTime;
 
     return pEngine;
@@ -31,6 +32,15 @@ void WaitForFrameTime(Engine *pEngine)
     }
 
     pEngine->nLastFrameTime=GetTickCount();
+}
+
+void EngineDoScenes(Engine *pEngine)
+{
+    SceneManager *pM=pEngine->pSceneManager;
+
+    pM->DoCal(pM);
+    pM->DoDraw(pM);
+    pM->DoEvents(pM);
 }
 
 SceneManager *CreateSceneManager()
