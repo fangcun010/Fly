@@ -240,3 +240,17 @@ unsigned long GetTickCount()
     return t.tv_sec*1000LL+t.tv_usec/1000;
 }
 
+BOOL LoadTexture(Texture *pTexture,const char *strFile)
+{
+    FILE *fp=fopen(strFile,"rb");
+
+    if(!fp)
+        return FALSE;
+
+    fread(&pTexture->Width,sizeof(pTexture->Width),1,fp);
+    fread(&pTexture->Height,sizeof(pTexture->Height),1,fp);
+
+
+
+    return TRUE;
+}

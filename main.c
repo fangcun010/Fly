@@ -4,6 +4,7 @@
 #include <GL/freeglut.h>
 #include <GL/gl.h>
 #include "Engine.h"
+#include "Game.h"
 
 #define 				WND_W						400
 #define				WND_H						600
@@ -34,7 +35,9 @@ void EngineInit()
 {
     Vector *pVt=pEngine->pSceneManager->pSceneVt;
 
-    vtAddBack(pVt,CreateScene());
+    InitGame();
+
+    vtAddBack(pVt,pMainMenuScene);
 }
 
 int main(int argc,char *argv[])
