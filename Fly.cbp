@@ -36,6 +36,7 @@
 			<Add option="-lglut" />
 			<Add option="-lGL" />
 			<Add option="-lGLEW" />
+			<Add option="-lGLU" />
 		</Linker>
 		<Unit filename="Engine.c">
 			<Option compilerVar="CC" />

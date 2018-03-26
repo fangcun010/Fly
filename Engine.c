@@ -47,9 +47,9 @@ void SceneManagerDoCal(SceneManager *pM)
 {
     for(int i=0;i<vtCount(pM->pSceneVt);i++)
     {
-        Scene *pScene=vtGet(pM->pSceneVt);
+        Scene *pScene=vtGet(pM->pSceneVt,i);
 
-        pScene->DoCal();
+        pScene->DoCal(pScene);
     }
 }
 
@@ -57,9 +57,9 @@ void SceneManagerDoDraw(SceneManager *pM)
 {
     for(int i=0;i<vtCount(pM->pSceneVt);i++)
     {
-        Scene *pScene=vtGet(pM->pSceneVt);
+        Scene *pScene=vtGet(pM->pSceneVt,i);
 
-        pScene->DoDraw();
+        pScene->DoDraw(pScene);
     }
 }
 
@@ -67,15 +67,15 @@ void SceneManagerDoEvents(SceneManager *pM)
 {
     for(int i=0;i<vtCount(pM->pSceneVt);i++)
     {
-        Scene *pScene=vtGet(pM->pSceneVt);
+        Scene *pScene=vtGet(pM->pSceneVt,i);
 
-        pScene->DoEvents();
+        pScene->DoEvents(pScene);
     }
 }
 
 void DestorySceneManager(SceneManager *pM)
 {
-    vtDestory(pVt);
+    vtDestory(pM->pSceneVt);
     free(pM);
 }
 
