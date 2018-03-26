@@ -1,4 +1,5 @@
 #include "Engine.h"
+#include <GL/gl.h>
 #include <stdlib.h>
 #include <sys/time.h>
 
@@ -109,6 +110,55 @@ void DestorySprite(Sprite *pSprite)
     free(pSprite);
 }
 
+SpriteManager *CreateSpriteManager()
+{
+    SpriteManager *pM=malloc(sizeof(SpriteManager));
+
+    pM->pSpriteVt=vtCreate();
+
+    pM->DoCal=SpriteManagerDoCal;
+    pM->DoDraw=SpriteManagerDoDraw;
+    pM->DoEvents=SpriteManagerDoEvents;
+
+    return pM;
+}
+
+void SpriteManagerDoCal(SpriteManager *pM)
+{
+    for(int i=0;i<vtCount(pM->pSpriteVt);i++)
+    {
+        Sprite *pSprite=vtGet(pM->pSpriteVt,i);
+
+        pSprite->DoCal(pSprite);
+    }
+}
+
+void SpriteManagerDoDraw(SpriteManager *pM)
+{
+    for(int i=0;i<vtCount(pM->pSpriteVt);i++)
+    {
+        Sprite *pSprite=vtGet(pM->pSpriteVt,i);
+
+        pSprite->DoDraw(pSprite);
+    }
+}
+
+void SpriteManagerDoEvents(SpriteManager *pM)
+{
+    for(int i=0;i<vtCount(pM->pSpriteVt);i++)
+    {
+        Sprite *pSprite=vtGet(pM->pSpriteVt,i);
+
+        pSprite->DoEvents(pSprite);
+    }
+}
+
+void DestorySpriteManager(SpriteManager *pM)
+{
+    vtDestory(pM->pSpriteVt);
+    free(pM);
+}
+
 Scene *CreateScene()
 {
     Scene *pScene=malloc(sizeof(Scene));
@@ -117,27 +167,35 @@ Scene *CreateScene()
     pScene->DoDraw=SceneDoDraw;
     pScene->DoEvents=SceneDoEvents;
 
+    pScene->pSpriteManager=CreateSpriteManager();
+
     return pScene;
 }
 
 void SceneDoCal(Scene *pScene)
 {
+    SpriteManager *pM=pScene->pSpriteManager;
 
+    pM->DoCal(pM);
 }
 
 void SceneDoDraw(Scene *pScene)
 {
+    SpriteManager *pM=pScene->pSpriteManager;
 
+    pM->DoDraw(pM);
 }
 
 void SceneDoEvents(Scene *pScene)
 {
+    SpriteManager *pM=pScene->pSpriteManager;
 
+    pM->DoEvents(pM);
 }
 
 void DestoryScene(Scene *pScene)
 {
-    vtDestory(pScene->pSpriteVt);
+    DestorySpriteManager(pScene->pSpriteManager);
     free(pScene);
 }
 

@@ -15,14 +15,17 @@ typedef void (*ObjFunc) (void *);
 
 typedef struct tagSprite                               //精灵
 {
-    Func DoCal;                                            //执行计算
-    Func DoDraw;                                           //执行绘制
-    Func DoEvents;                                        //执行事件　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　//执行事件
+    ObjFunc DoCal;                                            //执行计算
+    ObjFunc DoDraw;                                           //执行绘制
+    ObjFunc DoEvents;                                        //执行事件　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　//执行事件
 } Sprite;
 
 typedef struct tagSpriteManager                      //精灵管理器
 {
     Vector *pSpriteVt;                                   //精灵向量
+    ObjFunc DoCal;                                        //计算
+    ObjFunc DoDraw;                                       //绘制
+    ObjFunc DoEvents;                                     //事件
 } SpriteManager;
 
 typedef struct tagCallManager                        //回调管理器
@@ -46,9 +49,9 @@ typedef struct tagSoundManager                       //声音管理器
     Vector *pSoundVt;
 } SoundManager;
 
-typedef struct tagScene                                //场景
+typedef struct tagScene                                    //场景
 {
-    Vector *pSpriteVt;                                   //精灵向量
+    SpriteManager *pSpriteManager;                       //精灵向量
     ObjFunc DoCal;                                           //执行计算
     ObjFunc DoDraw;                                          //执行绘制
     ObjFunc DoEvents;                                       //执行事件
@@ -112,6 +115,18 @@ void                  DestoryScene(Scene *pScene);                        //销�
 void                  SceneDoCal(Scene *pScene);                           //场景计算
 void                  SceneDoDraw(Scene *pScene);                          //场景绘制
 void                  SceneDoEvents(Scene *pScene);                       //场景执行事件
+
+Sprite *              CreateSprite();
+void                   DestorySprite(Sprite *pSprite);
+void                   SpriteDoCal(Sprite *pSprite);
+void                   SpriteDoDraw(Sprite *Sprite);
+void                   SpriteDoEvents(Sprite *Sprite);
+
+SpriteManager *     CreateSpriteManager();
+void                   DestorySpriteManager(SpriteManager *pM);
+void                   SpriteManagerDoCal(SpriteManager *pM);
+void                   SpriteManagerDoDraw(SpriteManager *pM);
+void                   SpriteManagerDoEvents(SpriteManager *pM);
 
 TextureManager *   CreateTextureManager();                             //创建纹理管理器
 void                  DestoryTextureManager(TextureManager *pM);     //销毁纹理管理器

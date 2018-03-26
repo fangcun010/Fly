@@ -42,6 +42,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Engine.h" />
+		<Unit filename="Game.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Game.h" />
 		<Unit filename="Vector.c">
 			<Option compilerVar="CC" />
 		</Unit>
