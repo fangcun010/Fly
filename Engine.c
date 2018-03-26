@@ -45,23 +45,38 @@ SceneManager *CreateSceneManager()
 
 void SceneManagerDoCal(SceneManager *pM)
 {
+    for(int i=0;i<vtCount(pM->pSceneVt);i++)
+    {
+        Scene *pScene=vtGet(pM->pSceneVt);
 
+        pScene->DoCal();
+    }
 }
 
 void SceneManagerDoDraw(SceneManager *pM)
 {
+    for(int i=0;i<vtCount(pM->pSceneVt);i++)
+    {
+        Scene *pScene=vtGet(pM->pSceneVt);
 
+        pScene->DoDraw();
+    }
 }
 
 void SceneManagerDoEvents(SceneManager *pM)
 {
+    for(int i=0;i<vtCount(pM->pSceneVt);i++)
+    {
+        Scene *pScene=vtGet(pM->pSceneVt);
 
+        pScene->DoEvents();
+    }
 }
 
 void DestorySceneManager(SceneManager *pM)
 {
-
-
+    vtDestory(pVt);
+    free(pM);
 }
 
 TextureManager *CreateTextureManager()
