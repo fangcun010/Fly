@@ -147,11 +147,14 @@ unsigned int        TextureManagerAddTexture(TextureManager *pM,  //添加纹理
                                                     Texture *pTexture);
 Texture *            TextureManagerGetTexture(TextureManager *pM,   //获取纹理
                                                     unsigned int index);
+void                  TextureManagerUseTexture(TextureManager *pM,   //使用纹理
+                                                    unsigned int index);
 
 SoundManager *      CreateSoundManager();                               //创建声音管理器
 void                  DestorySoundManager(SoundManager *pM);          //销毁声音管理器
 
 unsigned long       GetTickCount();                                                     //获取毫秒数
 BOOL                   LoadTexture(Texture *pTexture,const char *strFile);        //载入纹理
+const char *         LoadTextFile(const char *strFile);                              //读取文本文件
 
 #endif // SGENGINE_H_INCLUDED

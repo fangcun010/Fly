@@ -255,7 +255,7 @@ Texture *TextureManagerGetTexture(TextureManager *pM,
 void TextureManagerUseTexture(TextureManager *pM,
                                         unsigned int index)
 {
-    Texture *pTexture=pM->GetTexture(,pM,index);
+    Texture *pTexture=pM->GetTexture(pM,index);
 
     glBindTexture(GL_TEXTURE_2D,pTexture->TexID);
 }
@@ -326,4 +326,28 @@ BOOL LoadTexture(Texture *pTexture,const char *strFile)
     fclose(fp);
 
     return TRUE;
+}
+
+const char *LoadTextFile(const char *strFile)
+{
+    FILE *fp=fopen(strFile,"rb");
+    char *pMem=NULL;
+
+    if(!fp) return NULL;
+
+    fseek(fp,SEEK_END,0);
+
+    unsigned int sz=ftell(fp);
+
+    pMem=malloc(sz);
+
+    if(!pMem) return NULL;
+
+    fseek(fp,SEEK_SET,0);
+
+    fread(pMem,sz,1,fp);
+
+    fclose(fp);
+
+    return pMem;
 }
