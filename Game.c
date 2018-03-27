@@ -19,7 +19,7 @@ void MainMenuSceneDoCal(Scene *pScene)
 
 void MainMenuSceneDoDraw(Scene *pScene)
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+
 }
 
 void MainMenuSceneDoEvents(Scene *pScene)

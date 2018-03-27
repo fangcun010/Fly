@@ -136,7 +136,7 @@ void                  DestoryTextureManager(TextureManager *pM);     //销毁纹
 SoundManager *      CreateSoundManager();                               //创建声音管理器
 void                  DestorySoundManager(SoundManager *pM);          //销毁声音管理器
 
-unsigned long       GetTickCount();                              //获取毫秒数
-Texture              LoadTexture(const char *strFile);        //载入纹理
+unsigned long       GetTickCount();                                                     //获取毫秒数
+BOOL                   LoadTexture(Texture *pTexture,const char *strFile);        //载入纹理
 
 #endif // SGENGINE_H_INCLUDED
