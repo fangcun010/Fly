@@ -12,8 +12,15 @@ typedef int BOOL;
 typedef void (*Func) ();                                 //函数回调
 typedef BOOL (*bFunc) ();
 typedef void (*ObjFunc) (void *);
+typedef void (*ObjFuncUInt) (void *,
+                                    unsigned int);
+typedef unsigned int (*UIntObjFunc) (void *);
+typedef unsigned int (*UIntObjFuncParam) (void *,
+                                            void *);
+typedef void *(*PointObjFuncUInt) (void *,
+                                    unsigned int);
 
-typedef struct tagSprite                               //精灵
+typedef struct tagSprite                                   //精灵
 {
     ObjFunc DoCal;                                            //执行计算
     ObjFunc DoDraw;                                           //执行绘制
@@ -42,6 +49,10 @@ typedef struct tagTexture
 typedef struct tagTextureManager                     //纹理管理器
 {
     Vector *pTextureVt;                                  //纹理向量
+
+    ObjFuncUInt UseTexture;                             //使用纹理
+    UIntObjFuncParam AddTexture;                      //添加纹理
+    PointObjFuncUInt GetTexture;                      //获取纹理
 } TextureManager;
 
 typedef struct tagSoundManager                       //声音管理器
@@ -132,6 +143,10 @@ void                   SpriteManagerDoEvents(SpriteManager *pM);
 
 TextureManager *   CreateTextureManager();                             //创建纹理管理器
 void                  DestoryTextureManager(TextureManager *pM);     //销毁纹理管理器
+unsigned int        TextureManagerAddTexture(TextureManager *pM,  //添加纹理
+                                                    Texture *pTexture);
+Texture *            TextureManagerGetTexture(TextureManager *pM,   //获取纹理
+                                                    unsigned int index);
 
 SoundManager *      CreateSoundManager();                               //创建声音管理器
 void                  DestorySoundManager(SoundManager *pM);          //销毁声音管理器

@@ -210,15 +210,65 @@ void DestoryScene(Scene *pScene)
     free(pScene);
 }
 
+Texture *CreateTexture()
+{
+    Texture *pTexture=malloc(sizeof(Texture));
+
+    return pTexture;
+}
+
+void DestoryTexture(Texture *pTexture)
+{
+    if(pTexture->TexID!=0)
+        glDeleteTextures(1,&pTexture->TexID);
+
+    free(pTexture);
+}
+
 TextureManager *CreateTextureManager()
 {
     TextureManager *pM=malloc(sizeof(TextureManager));
 
     pM->pTextureVt=vtCreate();
+
+    pM->UseTexture=TextureManagerUseTexture;
+    pM->AddTexture=TextureManagerAddTexture;
+    pM->GetTexture=TextureManagerGetTexture;
+}
+
+unsigned int TextureManagerAddTexture(TextureManager *pM,
+                                                Texture *pTexture)
+{
+    Vector *vt=pM->pTextureVt;
+
+    vtAddBack(vt,pTexture);
+
+    return vtCount(vt)-1;
+}
+
+Texture *TextureManagerGetTexture(TextureManager *pM,
+                                               unsigned int index)
+{
+    return vtGet(pM->pTextureVt,index);
+}
+
+void TextureManagerUseTexture(TextureManager *pM,
+                                        unsigned int index)
+{
+    Texture *pTexture=pM->GetTexture(,pM,index);
+
+    glBindTexture(GL_TEXTURE_2D,pTexture->TexID);
 }
 
 void DestoryTextureManager(TextureManager *pM)
 {
+    Vector *pTextureVt=pM->pTextureVt;
+
+    for(int i=0;i<vtCount(pTextureVt);i++)
+    {
+        DestoryTexture(vtGet(pTextureVt,i));
+    }
+
     vtDestory(pM->pTextureVt);
     free(pM);
 }
@@ -244,14 +294,36 @@ unsigned long GetTickCount()
 BOOL LoadTexture(Texture *pTexture,const char *strFile)
 {
     FILE *fp=fopen(strFile,"rb");
+    unsigned int w,h;
+    GLuint texID;
+    unsigned char *pData=NULL;
 
     if(!fp)
         return FALSE;
 
-    fread(&pTexture->Width,sizeof(pTexture->Width),1,fp);
-    fread(&pTexture->Height,sizeof(pTexture->Height),1,fp);
+    fread(&w,sizeof(w),1,fp);
+    fread(&h,sizeof(h),1,fp);
 
+    pData=malloc(w*h*4);
 
+    fread(pData,w*h*4,1,fp);
+
+    glGenTextures(1,&texID);
+    glBindTexture(GL_TEXTURE_2D,texID);
+
+    glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,w,h,0,GL_RGBA,GL_UNSIGNED_BYTE,pData);
+
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+
+    pTexture->Width=w;
+    pTexture->Height=h;
+
+    pTexture->TexID=texID;
+
+    fclose(fp);
 
     return TRUE;
 }

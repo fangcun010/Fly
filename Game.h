@@ -3,7 +3,10 @@
 
 #include "Engine.h"
 
-Scene *pMainMenuScene;                                     //主菜单场景
+extern Engine *pEngine;                                    //游戏引擎
+
+extern Scene *pMainMenuScene;                            //主菜单场景
+extern unsigned int BackgroundTexture;                 //背景纹理
 
 void InitGame();                                             //初始化游戏
 
