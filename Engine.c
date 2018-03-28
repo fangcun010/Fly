@@ -328,6 +328,11 @@ BOOL LoadTexture(Texture *pTexture,const char *strFile)
     return TRUE;
 }
 
+BOOL LoadShader(Shader *pShader,const char *strFile,BOOL bFrag)
+{
+
+}
+
 const char *LoadTextFile(const char *strFile)
 {
     FILE *fp=fopen(strFile,"rb");

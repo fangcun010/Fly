@@ -156,5 +156,9 @@ void                  DestorySoundManager(SoundManager *pM);          //销毁�
 unsigned long       GetTickCount();                                                     //获取毫秒数
 BOOL                   LoadTexture(Texture *pTexture,const char *strFile);        //载入纹理
 const char *         LoadTextFile(const char *strFile);                              //读取文本文件
+BOOL                  LoadShader(Shader *pShader,const char *strFile,             //载入着色器
+                                                    BOOL bFrag);
+void                  ShowImage(unsigned int TexID,int x,int y,                     //显示图像
+                                    int sx,int sy,int w,int h);
 
 #endif // SGENGINE_H_INCLUDED
