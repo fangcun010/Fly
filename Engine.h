@@ -100,6 +100,16 @@ typedef struct tagShderManager                                  //着色器管�
     Vector *pShaderVt;                                              //着色器向量
 } ShaderManager;
 
+typedef struct tagProgram                                         //着色程序
+{
+    GLuint ID;
+} Program;
+
+typedef struct tagProgramManager                                //着色程序管理器
+{
+    Vertex *pProgramVt;
+} ProgramManager;
+
 typedef struct tagEngine                                          //引擎
 {
     SceneManager *pSceneManager;                                 //场景管理器
@@ -159,6 +169,8 @@ BOOL                   LoadTexture(Texture *pTexture,const char *strFile);      
 const char *         LoadTextFile(const char *strFile);                              //读取文本文件
 BOOL                  LoadShader(Shader *pShader,const char *strFile,             //载入着色器
                                                     BOOL bFrag);
+BOOL                  LoadProgram(Shader *pVertexShader,                             //载入着色程序
+                                        Shader *pFragShader);
 void                  ShowImage(unsigned int TexID,int x,int y,                     //显示图像
                                     int sx,int sy,int w,int h);
 

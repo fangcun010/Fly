@@ -357,6 +357,28 @@ BOOL LoadShader(Shader *pShader,const char *strFile,BOOL bFrag)
     return TRUE;
 }
 
+BOOL LoadProgram(Program *pProgram,Shader *pVertexShader,Shader *pFragShader)
+{
+    GLuint program=glCreateProgram();
+
+    if(!program) return FALSE;
+
+    glAttachShader(program,pVertexShader->ID);
+    glAttachShader(program,pFragShader->ID);
+
+    glLinkProgram(program);
+
+    GLuint err;
+
+    glGetProgramiv(program,GL_LINK_STATUS,&err);
+
+    if(!err) return FALSE;
+
+    pProgram->ID=program;
+
+    return true;
+}
+
 const char *LoadTextFile(const char *strFile)
 {
     FILE *fp=fopen(strFile,"rb");
