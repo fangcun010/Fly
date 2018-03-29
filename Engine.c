@@ -330,7 +330,31 @@ BOOL LoadTexture(Texture *pTexture,const char *strFile)
 
 BOOL LoadShader(Shader *pShader,const char *strFile,BOOL bFrag)
 {
+    const char *pText=LoadTextFile(strFile);
 
+    GLuint shader;
+
+    if(bFrag) shader=glCreateShader(GL_FRAGMENT_SHADER);
+    else shader=glCreateShader(GL_VERTEX_SHADER);
+
+    if(!shader)
+        return FALSE;
+
+    glShaderSource(shader,0,pText,NULL);
+    glCompileShader(shader);
+
+    GLuint err;
+
+    glGetShaderiv(shader,GL_COMPILE_STATUS,&err);
+
+    if(!err)
+        return FALSE;
+
+    free(pText);
+
+    pShader->ID=shader;
+
+    return TRUE;
 }
 
 const char *LoadTextFile(const char *strFile)
@@ -340,17 +364,19 @@ const char *LoadTextFile(const char *strFile)
 
     if(!fp) return NULL;
 
-    fseek(fp,SEEK_END,0);
+    fseek(fp,0,SEEK_END);
 
-    unsigned int sz=ftell(fp);
+    long int sz=ftell(fp);
 
-    pMem=malloc(sz);
+    pMem=malloc(sz+1);
 
     if(!pMem) return NULL;
 
-    fseek(fp,SEEK_SET,0);
+    fseek(fp,0,SEEK_SET);
 
     fread(pMem,sz,1,fp);
+
+    pMem[sz]=0;
 
     fclose(fp);
 

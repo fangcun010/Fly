@@ -91,7 +91,8 @@ typedef struct tagEventManager                                  //事件管理�
 
 typedef struct tagShader                                           //着色器
 {
-
+    GLuint ID;                                                        //着色器ID
+    BOOL bFrag;                                                       //是否是片段着色器
 } Shader;
 
 typedef struct tagShderManager                                  //着色器管理器
