@@ -273,6 +273,65 @@ void DestoryTextureManager(TextureManager *pM)
     free(pM);
 }
 
+Shader *CreateShader(BOOL bFrag)
+{
+    Shader *pShader=malloc(sizeof(Shader));
+
+    pShader->bFrag=bFrag;
+
+    return pShader;
+}
+
+void DestoryShader(Shader *pShader)
+{
+
+    free(pShader);
+}
+
+ShaderManager *CreateShaderManager()
+{
+    ShaderManager *pM=malloc(sizeof(ShaderManager));
+
+    pM->pShaderVt=vtCreate();
+
+    return pM;
+}
+
+void DestoryShaderManager(ShaderManager *pM)
+{
+    Vector *pVt=pM->pShaderVt;
+
+    for(int i=0;i<vtCount(pVt);i++)
+    {
+
+    }
+
+    vtDestory(pVt);
+
+    free(pM);
+}
+
+unsigned int ShaderManagerAddShader(ShaderManager *pM,
+                                    Shader *pShader)
+{
+    unsigned int ret;
+    Vector *pVt=pM->pShaderVt;
+
+    ret=vtAddBack(pVt,pShader);
+
+    vtAddBack(pVt);
+
+    return ret;
+}
+
+Shader *ShaderManagerGetShader(ShaderManager *pM,
+                                unsigned int index)
+{
+    Vector *pVt=pM->pShaderVt;
+
+    return vtGet(pVt,index);
+}
+
 SoundManager *CreateSoundManager()
 {
 }

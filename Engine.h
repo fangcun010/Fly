@@ -161,6 +161,16 @@ Texture *            TextureManagerGetTexture(TextureManager *pM,   //获取纹�
 void                  TextureManagerUseTexture(TextureManager *pM,   //使用纹理
                                                     unsigned int index);
 
+Shader *             CreateShader(BOOL bFrag);                            //创建着色器
+void                  DestoryShader(Shader *pShader);                    //销毁着色器
+
+ShaderManager *    CreateShaderManager();                               //创建着色器管理器
+void                  DestoryShaderManager(ShaderManager *pM);        //销毁着色器管理器
+unsigned int        ShaderManagerAddShader(ShaderManager *pM,      //添加着色器
+                                           Shader *pShader);
+void                  ShaderManagerGetShader(ShaderManager *pM,       //获取着色器
+                                            unsigned int index);
+
 SoundManager *      CreateSoundManager();                               //创建声音管理器
 void                  DestorySoundManager(SoundManager *pM);          //销毁声音管理器
 
