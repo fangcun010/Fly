@@ -251,7 +251,6 @@ Texture *TextureManagerGetTexture(TextureManager *pM,
 {
     return vtGet(pM->pTextureVt,index);
 }
-
 void TextureManagerUseTexture(TextureManager *pM,
                                         unsigned int index)
 {
@@ -284,6 +283,8 @@ Shader *CreateShader(BOOL bFrag)
 
 void DestoryShader(Shader *pShader)
 {
+    if(pShader->ID)
+        glDeleteShader(pShader->ID);
 
     free(pShader);
 }
@@ -302,9 +303,7 @@ void DestoryShaderManager(ShaderManager *pM)
     Vector *pVt=pM->pShaderVt;
 
     for(int i=0;i<vtCount(pVt);i++)
-    {
-
-    }
+        DestoryShader(vtGet(pVt,i));
 
     vtDestory(pVt);
 
@@ -317,9 +316,9 @@ unsigned int ShaderManagerAddShader(ShaderManager *pM,
     unsigned int ret;
     Vector *pVt=pM->pShaderVt;
 
-    ret=vtAddBack(pVt,pShader);
+    ret=vtCount(pVt);
 
-    vtAddBack(pVt);
+    vtAddBack(pVt,pShader);
 
     return ret;
 }
@@ -435,7 +434,7 @@ BOOL LoadProgram(Program *pProgram,Shader *pVertexShader,Shader *pFragShader)
 
     pProgram->ID=program;
 
-    return true;
+    return TRUE;
 }
 
 const char *LoadTextFile(const char *strFile)
@@ -462,4 +461,10 @@ const char *LoadTextFile(const char *strFile)
     fclose(fp);
 
     return pMem;
+}
+
+void ShowImage(TextureManager *pM,unsigned int TexID,int x,int y,
+                    int sx,int sy,int w,inkt h)
+{
+    pM->UseTexture(pM,TexID);
 }

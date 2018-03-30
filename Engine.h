@@ -107,7 +107,7 @@ typedef struct tagProgram                                         //着色程序
 
 typedef struct tagProgramManager                                //着色程序管理器
 {
-    Vertex *pProgramVt;
+    Vector *pProgramVt;
 } ProgramManager;
 
 typedef struct tagEngine                                          //引擎
@@ -168,7 +168,7 @@ ShaderManager *    CreateShaderManager();                               //创建
 void                  DestoryShaderManager(ShaderManager *pM);        //销毁着色器管理器
 unsigned int        ShaderManagerAddShader(ShaderManager *pM,      //添加着色器
                                            Shader *pShader);
-void                  ShaderManagerGetShader(ShaderManager *pM,       //获取着色器
+Shader *             ShaderManagerGetShader(ShaderManager *pM,       //获取着色器
                                             unsigned int index);
 
 SoundManager *      CreateSoundManager();                               //创建声音管理器
@@ -179,9 +179,9 @@ BOOL                   LoadTexture(Texture *pTexture,const char *strFile);      
 const char *         LoadTextFile(const char *strFile);                              //读取文本文件
 BOOL                  LoadShader(Shader *pShader,const char *strFile,             //载入着色器
                                                     BOOL bFrag);
-BOOL                  LoadProgram(Shader *pVertexShader,                             //载入着色程序
+BOOL                  LoadProgram(Program *pProgram,Shader *pVertexShader,      //载入着色程序
                                         Shader *pFragShader);
-void                  ShowImage(unsigned int TexID,int x,int y,                     //显示图像
-                                    int sx,int sy,int w,int h);
+void                  ShowImage(TextureManager *pM,unsigned int TexID,            //显示图像
+                                        int x,int y,int sx,int sy,int w,int h);
 
 #endif // SGENGINE_H_INCLUDED
