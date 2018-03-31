@@ -491,8 +491,16 @@ const char *LoadTextFile(const char *strFile)
     return pMem;
 }
 
+static GLfloat ShowImageVts[4]=
+{
+    0.0f,0.0f           ,0.0f,0.0f,
+    0.0f,0.0f           ,1.0f,0.0f,
+    0.0f,0.0f           ,1.0f,1.0f,
+    0.0f,0.0f           ,0.0f,1.0f
+};
+
 void ShowImage(TextureManager *pM,unsigned int TexID,int x,int y,
                     int sx,int sy,int w,int h)
 {
-    pM->UseTexture(pM,TexID);
+
 }
