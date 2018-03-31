@@ -98,6 +98,8 @@ typedef struct tagShader                                           //着色器
 typedef struct tagShderManager                                  //着色器管理器
 {
     Vector *pShaderVt;                                              //着色器向量
+    UIntObjFuncParam AddShader;                                    //添加着色器
+    PointObjFuncUInt GetShader;
 } ShaderManager;
 
 typedef struct tagProgram                                         //着色程序
@@ -108,6 +110,9 @@ typedef struct tagProgram                                         //着色程序
 typedef struct tagProgramManager                                //着色程序管理器
 {
     Vector *pProgramVt;
+    UIntObjFuncParam AddProgram;
+    PointObjFuncUInt GetProgram;
+    ObjFuncUInt UseProgram;
 } ProgramManager;
 
 typedef struct tagEngine                                          //引擎
@@ -174,11 +179,21 @@ Shader *             ShaderManagerGetShader(ShaderManager *pM,       //获取着
 Program *            CreateProgram();                                   //创建着色器程序
 void                  DestoryProgram(Program *pProgram);              //销毁着色器程序
 
+ProgramManager *    CreateProgramManager();                          //创建着色程序管理器
+void                  DestoryProgramManager(ProgramManager *pM);    //销毁着色程序管理器
+unsigned int         ProgramManagerAddProgram(ProgramManager *pM,  //添加着色器程序
+                                        Program *pProgram);
+Program *             ProgramManagerGet(ProgramManager *pM,         //着色器程序获取
+                                        unsigned int index);
+void                  ProgramManagerUseProgram(ProgramManager *pM,  //使用着色器程序
+                                            unsigned int index);
+
+
 SoundManager *      CreateSoundManager();                               //创建声音管理器
 void                  DestorySoundManager(SoundManager *pM);          //销毁声音管理器
 
 unsigned long       GetTickCount();                                                     //获取毫秒数
-BOOL                   LoadTexture(Texture *pTexture,const char *strFile);        //载入纹理
+BOOL                  LoadTexture(Texture *pTexture,const char *strFile);        //载入纹理
 const char *         LoadTextFile(const char *strFile);                              //读取文本文件
 BOOL                  LoadShader(Shader *pShader,const char *strFile,             //载入着色器
                                                     BOOL bFrag);

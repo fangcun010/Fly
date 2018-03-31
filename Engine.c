@@ -295,6 +295,9 @@ ShaderManager *CreateShaderManager()
 
     pM->pShaderVt=vtCreate();
 
+    pM->AddShader=ShaderManagerAddShader;
+    pM->GetShader=ShaderManagerGetShader;
+
     return pM;
 }
 
@@ -352,6 +355,60 @@ void DestoryProgram(Program *pProgram)
     if(pProgram->ID)
         glDeleteProgram(pProgram->ID);
     free(pProgram);
+}
+
+ProgramManager *CreateProgramManager()
+{
+    ProgramManager *pM=malloc(sizeof(ProgramManager));
+
+    pM->pProgramVt=vtCreate();
+
+    pM->AddProgram=ProgramManagerAddProgram;
+    pM->GetProgram=ProgramManagerGet;
+    pM->UseProgram=ProgramManagerUseProgram;
+
+    return pM;
+}
+
+void DestoryProgramManager(ProgramManager *pM)
+{
+    Vector *pVt=pM->pProgramVt;
+
+    for(int i=0;vtCount(pVt);i++)
+        DestoryProgram(vtGet(pVt,i));
+
+    free(pM);
+}
+
+unsigned int ProgramManagerAddProgram(ProgramManager *pM,
+                              Program *pProgram)
+{
+    Vector *pVt=pM->pProgramVt;
+
+    unsigned int ret;
+
+    ret=vtCount(pVt);
+
+    vtAddBack(pVt,pProgram);
+
+    return ret;
+}
+
+Program *ProgramManagerGet(ProgramManager *pM,
+                           unsigned int index)
+{
+    Vector *pVt=pM->pProgramVt;
+
+    return vtGet(pVt,index);
+}
+
+void ProgramManagerUseProgram(ProgramManager *pM,
+                              unsigned int index)
+{
+    Vector *pVt=pM->pProgramVt;
+    Program *program=vtGet(pVt,index);
+
+    glUseProgram(program->ID);
 }
 
 unsigned long GetTickCount()
