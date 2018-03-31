@@ -1,7 +1,7 @@
-#version 130
+#version 330
 
-in vec4 fColor;
-out vec4 Color;
+smooth in vec3 fColor;
+out vec3 Color;
 
 void main()
 {

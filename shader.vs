@@ -1,12 +1,13 @@
-#version 130
+#version 330
+
 in vec2 vPos;
 in vec3 vColor;
 
-out vec4 fColor;
+smooth out vec3 fColor;
 
 void main()
 {
-	fColor=vec4(vColor,0.0);
-	gl_Position=vec4(vPos,0.0,0.0);
+	fColor=vColor;
+	gl_Position=vec4(vPos,0,1);
 }
 

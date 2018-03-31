@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1522500697 source:/home/renjie/Fly/main.c
+1522502316 source:/home/renjie/Fly/main.c
 	<stdio.h>
 	<stdlib.h>
 	<GL/glew.h>
