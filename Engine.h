@@ -22,6 +22,8 @@ typedef void *(*PointObjFuncUInt) (void *,
 
 typedef struct tagSprite                                   //精灵
 {
+    unsigned int ID;
+
     ObjFunc DoCal;                                            //执行计算
     ObjFunc DoDraw;                                           //执行绘制
     ObjFunc DoEvents;                                        //执行事件　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　//执行事件
@@ -42,6 +44,7 @@ typedef struct tagCallManager                        //回调管理器
 
 typedef struct tagTexture
 {
+    unsigned int ID;
     int Width,Height;                                    //大小
     unsigned int TexID;                                 //纹理ID
 } Texture;
@@ -62,6 +65,8 @@ typedef struct tagSoundManager                       //声音管理器
 
 typedef struct tagScene                                    //场景
 {
+    unsigned int ID;
+
     SpriteManager *pSpriteManager;                       //精灵向量
     ObjFunc DoCal;                                           //执行计算
     ObjFunc DoDraw;                                          //执行绘制
@@ -79,6 +84,7 @@ typedef struct tagSceneManager                                  //场景管理�
 
 typedef struct tagEvent                                          //事件
 {
+    unsigned int ID;
     int nEventID;                                                   //事件ID
     void *pTag;                                                      //事件附加信息
 } Event;
@@ -91,7 +97,8 @@ typedef struct tagEventManager                                  //事件管理�
 
 typedef struct tagShader                                           //着色器
 {
-    GLuint ID;                                                        //着色器ID
+    unsigned int ID;
+    GLuint shaderID;                                                        //着色器ID
     BOOL bFrag;                                                       //是否是片段着色器
 } Shader;
 
@@ -104,7 +111,8 @@ typedef struct tagShderManager                                  //着色器管�
 
 typedef struct tagProgram                                         //着色程序
 {
-    GLuint ID;
+    unsigned int ID;
+    GLuint ProgramID;
 } Program;
 
 typedef struct tagProgramManager                                //着色程序管理器
@@ -192,6 +200,7 @@ void                  ProgramManagerUseProgram(ProgramManager *pM,  //使用着�
 SoundManager *      CreateSoundManager();                               //创建声音管理器
 void                  DestorySoundManager(SoundManager *pM);          //销毁声音管理器
 
+unsigned int        MakeID();                                            //产生一个不重复的ID值
 unsigned long       GetTickCount();                                                     //获取毫秒数
 BOOL                  LoadTexture(Texture *pTexture,const char *strFile);        //载入纹理
 const char *         LoadTextFile(const char *strFile);                              //读取文本文件

@@ -493,6 +493,13 @@ BOOL LoadShader(Shader *pShader,const char *strFile,BOOL bFrag)
     return TRUE;
 }
 
+unsigned int MakeID()
+{
+    static unsigned int id;
+
+    return id++;
+}
+
 BOOL LoadProgram(Program *pProgram,Shader *pVertexShader,Shader *pFragShader)
 {
     GLuint program=glCreateProgram();
