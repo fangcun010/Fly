@@ -340,6 +340,20 @@ void DestorySoundManager(SoundManager *pM)
 
 }
 
+Program *CreateProgram()
+{
+    Program *program=malloc(sizeof(Program));
+
+    return program;
+}
+
+void DestoryProgram(Program *pProgram)
+{
+    if(pProgram->ID)
+        glDeleteProgram(pProgram->ID);
+    free(pProgram);
+}
+
 unsigned long GetTickCount()
 {
     struct timeval t;
@@ -398,7 +412,8 @@ BOOL LoadShader(Shader *pShader,const char *strFile,BOOL bFrag)
     if(!shader)
         return FALSE;
 
-    glShaderSource(shader,0,pText,NULL);
+
+    glShaderSource(shader,1,&pText,NULL);
     glCompileShader(shader);
 
     GLuint err;
@@ -406,7 +421,13 @@ BOOL LoadShader(Shader *pShader,const char *strFile,BOOL bFrag)
     glGetShaderiv(shader,GL_COMPILE_STATUS,&err);
 
     if(!err)
+    {
+        GLchar *log[1024];
+
+        glGetShaderInfoLog(shader,sizeof(log),NULL,log);
+        printf("%s\n%s\n",strFile,log);
         return FALSE;
+    }
 
     free(pText);
 
@@ -430,7 +451,14 @@ BOOL LoadProgram(Program *pProgram,Shader *pVertexShader,Shader *pFragShader)
 
     glGetProgramiv(program,GL_LINK_STATUS,&err);
 
-    if(!err) return FALSE;
+    if(!err)
+    {
+        GLchar *log[1024];
+
+        glGetProgramInfoLog(program,sizeof(log),NULL,log);
+        printf("%s\n",log);
+        return FALSE;
+    }
 
     pProgram->ID=program;
 
@@ -464,7 +492,7 @@ const char *LoadTextFile(const char *strFile)
 }
 
 void ShowImage(TextureManager *pM,unsigned int TexID,int x,int y,
-                    int sx,int sy,int w,inkt h)
+                    int sx,int sy,int w,int h)
 {
     pM->UseTexture(pM,TexID);
 }

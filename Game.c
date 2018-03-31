@@ -26,8 +26,6 @@ void MainMenuSceneDoCal(Scene *pScene)
     TextureManager *pM=pEngine->pTextureManager;
 
     pM->UseTexture(pM,BackgroundTexture);
-
-
 }
 
 void MainMenuSceneDoDraw(Scene *pScene)
@@ -39,6 +37,3 @@ void MainMenuSceneDoEvents(Scene *pScene)
 {
 
 }
-
-
-

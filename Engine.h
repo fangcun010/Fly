@@ -171,6 +171,9 @@ unsigned int        ShaderManagerAddShader(ShaderManager *pM,      //添加着�
 Shader *             ShaderManagerGetShader(ShaderManager *pM,       //获取着色器
                                             unsigned int index);
 
+Program *            CreateProgram();                                   //创建着色器程序
+void                  DestoryProgram(Program *pProgram);              //销毁着色器程序
+
 SoundManager *      CreateSoundManager();                               //创建声音管理器
 void                  DestorySoundManager(SoundManager *pM);          //销毁声音管理器
 

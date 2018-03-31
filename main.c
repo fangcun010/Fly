@@ -23,16 +23,57 @@ void ShowOpenGLVersion()
     printf("OpenGL工具库版本：%s\n", strgluVersion);
 }
 
+GLfloat vts[]={
+    0.0f,0.0f,1.0f,1.0f,1.0f,
+    1.0f,1.0f,1.0f,1.0f,1.0f,
+    0.0f,1.0f,1.0f,1.0f,1.0f
+};
+
 void Display()
 {
 	glClearColor(0,0,0,0);
 	glClear(GL_COLOR_BUFFER_BIT);
+
+	GLuint VAO,VBO;
+
+	glGenVertexArrays(1,&VAO);
+	glGenBuffers(1,&VBO);
+    glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER,VBO);
+
+	glBufferData(GL_ARRAY_BUFFER,sizeof(vts),vts,GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0,2,GL_FLOAT,GL_FALSE,5*sizeof(GLfloat),(GLvoid *)0);
+    glEnableVertexAttribArray (0);
+	glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,5*sizeof(GLfloat),(GLvoid *)(2*sizeof(GLfloat)));
+    glEnableVertexAttribArray (1);
+
+	glDrawArrays(GL_TRIANGLES,0,3);
 
 	glutSwapBuffers();
 }
 
 void EngineInit()
 {
+    Shader *vShader=CreateShader(FALSE);
+    Shader *fShader=CreateShader(TRUE);
+
+    if(!LoadShader(vShader,"shader.vs",FALSE))
+    {
+        printf("Load vShader Fail:%s\n","shader.vs");
+    }
+
+    if(!LoadShader(fShader,"shader.fs",TRUE))
+    {
+        printf("Load fShader Fail:%s\n","shader.fs");
+    }
+
+    Program *pProgram=CreateProgram();
+
+    LoadProgram(pProgram,vShader,fShader);
+
+    glUseProgram(pProgram->ID);
+
     Vector *pVt=pEngine->pSceneManager->pSceneVt;
 
     InitGame();
