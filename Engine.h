@@ -57,6 +57,7 @@ typedef struct tagTextureManager                     //纹理管理器
 
     ObjFuncUInt UseTexture;                             //使用纹理
     UIntObjFuncParam AddTexture;                      //添加纹理
+    PointObjFuncUInt RemoveTexture;                   //移除纹理
     PointObjFuncUInt GetTexture;                      //获取纹理
 } TextureManager;
 
@@ -147,6 +148,8 @@ SceneManager *      CreateSceneManager();                                //创�
 void                  DestorySceneManager(SceneManager *pM);           //销毁场景管理器
 unsigned int         SceneManagerAddScene(SceneManager *pM,           //添加场景
                                            Scene *pScene);
+Scene *               SceneManagerRemoveScene(SceneManager *pM,        //移除场景
+                                    unsigned int ID);
 void                  SceneManagerDoCal(SceneManager *pM);             //计算
 void                  SceneManagerDoDraw(SceneManager *pM);            //绘制
 void                  SceneManagerDoEvents(SceneManager *pM);          //执行事件
@@ -173,14 +176,16 @@ void                   SpriteManagerDoCal(SpriteManager *pM);
 void                   SpriteManagerDoDraw(SpriteManager *pM);
 void                   SpriteManagerDoEvents(SpriteManager *pM);
 
-TextureManager *   CreateTextureManager();                             //创建纹理管理器
-void                  DestoryTextureManager(TextureManager *pM);     //销毁纹理管理器
-unsigned int        TextureManagerAddTexture(TextureManager *pM,  //添加纹理
+TextureManager *   CreateTextureManager();                                  //创建纹理管理器
+void                  DestoryTextureManager(TextureManager *pM);           //销毁纹理管理器
+unsigned int        TextureManagerAddTexture(TextureManager *pM,          //添加纹理
                                                     Texture *pTexture);
+Texture *            TextureManagerRemoveTexture(TextureManager *pM,       //移除纹理
+                                                 unsigned int ID);
 Texture *            TextureManagerGetTexture(TextureManager *pM,   //获取纹理
-                                                    unsigned int index);
+                                                    unsigned int ID);
 void                  TextureManagerUseTexture(TextureManager *pM,   //使用纹理
-                                                    unsigned int index);
+                                                    unsigned int ID);
 
 Shader *             CreateShader(BOOL bFrag);                            //创建着色器
 void                  DestoryShader(Shader *pShader);                    //销毁着色器
@@ -190,7 +195,7 @@ void                  DestoryShaderManager(ShaderManager *pM);        //销毁�
 unsigned int        ShaderManagerAddShader(ShaderManager *pM,      //添加着色器
                                            Shader *pShader);
 Shader *             ShaderManagerGetShader(ShaderManager *pM,       //获取着色器
-                                            unsigned int index);
+                                            unsigned int ID);
 
 Program *            CreateProgram();                                   //创建着色器程序
 void                  DestoryProgram(Program *pProgram);              //销毁着色器程序
@@ -200,9 +205,9 @@ void                  DestoryProgramManager(ProgramManager *pM);    //销毁着�
 unsigned int         ProgramManagerAddProgram(ProgramManager *pM,  //添加着色器程序
                                         Program *pProgram);
 Program *             ProgramManagerGet(ProgramManager *pM,         //着色器程序获取
-                                        unsigned int index);
+                                        unsigned int ID);
 void                  ProgramManagerUseProgram(ProgramManager *pM,  //使用着色器程序
-                                            unsigned int index);
+                                            unsigned int ID);
 
 
 SoundManager *      CreateSoundManager();                               //创建声音管理器

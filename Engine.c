@@ -57,6 +57,25 @@ SceneManager *CreateSceneManager()
     return pM;
 }
 
+Scene *SceneManagerRemoveScene(SceneManager *pM,
+                               unsigned int ID)
+{
+    Vector *pVt=pM->pSceneVt;
+
+    for(int i=0;i<vtCount(pVt);i++)
+    {
+        Scene *pScene=vtGet(pVt,i);
+
+        if(pScene->ID==ID)
+        {
+            vtRemove(pVt,i);
+            return pScene;
+        }
+    }
+
+    return NULL;
+}
+
 unsigned int SceneManagerAddScene(SceneManager *pM,
                                   Scene *pScene)
 {
@@ -275,23 +294,55 @@ TextureManager *CreateTextureManager()
 
     pM->UseTexture=TextureManagerUseTexture;
     pM->AddTexture=TextureManagerAddTexture;
+    pM->RemoveTexture=TextureManagerRemoveTexture;
     pM->GetTexture=TextureManagerGetTexture;
 }
 
 unsigned int TextureManagerAddTexture(TextureManager *pM,
                                                 Texture *pTexture)
 {
-    Vector *vt=pM->pTextureVt;
+    Vector *pVt=pM->pTextureVt;
 
-    vtAddBack(vt,pTexture);
+    vtAddBack(pVt,pTexture);
 
-    return vtCount(vt)-1;
+    return pTexture->ID;
+}
+
+Texture *TextureManagerRemoveTexture(TextureManager *pM,
+                                            unsigned int ID)
+{
+    Vector *pVt=pM->pTextureVt;
+
+    for(int i=0;i<vtCount(pVt);i++)
+    {
+        Texture *pTexture=vtGet(pVt,i);
+
+        if(pTexture->ID==ID)
+        {
+            vtRemove(pVt,i);
+            return pTexture;
+        }
+    }
+
+    return NULL;
 }
 
 Texture *TextureManagerGetTexture(TextureManager *pM,
-                                               unsigned int index)
+                                               unsigned int ID)
 {
-    return vtGet(pM->pTextureVt,index);
+    Vector *pVt=pM->pTextureVt;
+
+    for(int i=0;i<vtCount(pVt);i++)
+    {
+        Texture *pTexture=vtGet(pVt,i);
+
+        if(pTexture->ID==ID)
+        {
+            return pTexture;
+        }
+    }
+
+    return NULL;
 }
 void TextureManagerUseTexture(TextureManager *pM,
                                         unsigned int index)
