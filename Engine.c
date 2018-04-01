@@ -139,6 +139,7 @@ SpriteManager *CreateSpriteManager()
 
     pM->pSpriteVt=vtCreate();
 
+    pM->RemoveSprite=SpriteManagerRemoveSprite;
     pM->DoCal=SpriteManagerDoCal;
     pM->DoDraw=SpriteManagerDoDraw;
     pM->DoEvents=SpriteManagerDoEvents;
@@ -146,7 +147,7 @@ SpriteManager *CreateSpriteManager()
     return pM;
 }
 
-Sprite *SpriteManagerRemove(SpriteManager *pM,
+Sprite *SpriteManagerRemoveSprite(SpriteManager *pM,
                             unsigned int ID)
 {
     Vector *pVt=pM->pSpriteVt;
@@ -159,6 +160,16 @@ Sprite *SpriteManagerRemove(SpriteManager *pM,
     }
 
     return NULL;
+}
+
+unsigned int SpriteManagerAddSprite(SpriteManager *pM,
+                            Sprite *pSprite)
+{
+    Vector *pVt=pM->pSpriteVt;
+
+    vtAddBack(pVt,pSprite);
+
+    return pSprite->ID;
 }
 
 void SpriteManagerDoCal(SpriteManager *pM)

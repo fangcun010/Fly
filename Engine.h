@@ -32,6 +32,8 @@ typedef struct tagSprite                                   //精灵
 typedef struct tagSpriteManager                      //精灵管理器
 {
     Vector *pSpriteVt;                                   //精灵向量
+
+    PointObjFuncUInt RemoveSprite;
     ObjFunc DoCal;                                        //计算
     ObjFunc DoDraw;                                       //绘制
     ObjFunc DoEvents;                                     //事件
@@ -163,9 +165,10 @@ void                   SpriteDoEvents(Sprite *Sprite);
 
 SpriteManager *     CreateSpriteManager();                                //创建精灵管理器
 void                   DestorySpriteManager(SpriteManager *pM);          //销毁精灵管理器
-//void                   SpriteManagerAddSprite()
-//Sprite *               SpriteManagerRemoveSprite(SpriteManager *pM,     //移除精灵
-//                                           unsigned int ID);
+unsigned int          SpriteManagerAddSprite(SpriteManager *pM,
+                                        Sprite *pSprite);
+Sprite *               SpriteManagerRemoveSprite(SpriteManager *pM,     //移除精灵
+                                           unsigned int ID);
 void                   SpriteManagerDoCal(SpriteManager *pM);
 void                   SpriteManagerDoDraw(SpriteManager *pM);
 void                   SpriteManagerDoEvents(SpriteManager *pM);
