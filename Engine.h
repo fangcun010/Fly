@@ -163,8 +163,9 @@ void                   SpriteDoEvents(Sprite *Sprite);
 
 SpriteManager *     CreateSpriteManager();                                //创建精灵管理器
 void                   DestorySpriteManager(SpriteManager *pM);          //销毁精灵管理器
-Sprite *               SpriteManagerRemove(SpriteManager *pM,            //移除精灵
-                                           unsigned int ID);
+//void                   SpriteManagerAddSprite()
+//Sprite *               SpriteManagerRemoveSprite(SpriteManager *pM,     //移除精灵
+//                                           unsigned int ID);
 void                   SpriteManagerDoCal(SpriteManager *pM);
 void                   SpriteManagerDoDraw(SpriteManager *pM);
 void                   SpriteManagerDoEvents(SpriteManager *pM);
