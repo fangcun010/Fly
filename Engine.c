@@ -49,11 +49,22 @@ SceneManager *CreateSceneManager()
     SceneManager *pM=malloc(sizeof(SceneManager));
 
     pM->pSceneVt=vtCreate();
+
     pM->DoCal=SceneManagerDoCal;
     pM->DoDraw=SceneManagerDoDraw;
     pM->DoEvents=SceneManagerDoEvents;
 
     return pM;
+}
+
+unsigned int SceneManagerAddScene(SceneManager *pM,
+                                  Scene *pScene)
+{
+    Vector *pVt=pM->pSceneVt;
+
+    vtAddBack(pVt,pScene);
+
+    return pScene->ID;
 }
 
 void SceneManagerDoCal(SceneManager *pM)
@@ -111,6 +122,7 @@ Sprite *CreateSprite()
 {
     Sprite *pSprite=malloc(sizeof(Sprite));
 
+    pSprite->ID=MakeID();
     pSprite->DoCal=SpriteDoCal;
     pSprite->DoDraw=SpriteDoDraw;
     pSprite->DoEvents=SpriteDoEvents;
@@ -132,6 +144,21 @@ SpriteManager *CreateSpriteManager()
     pM->DoEvents=SpriteManagerDoEvents;
 
     return pM;
+}
+
+Sprite *SpriteManagerRemove(SpriteManager *pM,
+                            unsigned int ID)
+{
+    Vector *pVt=pM->pSpriteVt;
+
+    for(int i=0;i<vtCount(pVt);i++)
+    {
+        Sprite *pSprite=vtGet(pVt,i);
+
+        if(pSprite->ID==ID) return pSprite;
+    }
+
+    return NULL;
 }
 
 void SpriteManagerDoCal(SpriteManager *pM)
@@ -174,6 +201,8 @@ Scene *CreateScene()
 {
     Scene *pScene=malloc(sizeof(Scene));
 
+    pScene->ID=MakeID();
+
     pScene->DoCal=SceneDoCal;
     pScene->DoDraw=SceneDoDraw;
     pScene->DoEvents=SceneDoEvents;
@@ -213,6 +242,8 @@ void DestoryScene(Scene *pScene)
 Texture *CreateTexture()
 {
     Texture *pTexture=malloc(sizeof(Texture));
+
+    pTexture->ID=MakeID();
 
     return pTexture;
 }
@@ -276,6 +307,7 @@ Shader *CreateShader(BOOL bFrag)
 {
     Shader *pShader=malloc(sizeof(Shader));
 
+    pShader->ID=MakeID();
     pShader->bFrag=bFrag;
 
     return pShader;
@@ -346,6 +378,8 @@ void DestorySoundManager(SoundManager *pM)
 Program *CreateProgram()
 {
     Program *program=malloc(sizeof(Program));
+
+    program->ID=MakeID();
 
     return program;
 }

@@ -79,7 +79,7 @@ typedef struct tagSceneManager                                  //场景管理�
 
     ObjFunc DoCal;                                                      //执行计算
     ObjFunc DoDraw;                                                     //执行绘制
-    ObjFunc DoEvents;                                                  //执行事件
+    ObjFunc DoEvents;                                                   //执行事件
 } SceneManager;
 
 typedef struct tagEvent                                          //事件
@@ -143,6 +143,8 @@ void                  WaitForFrameTime(Engine *pEngine);         //等待帧时�
 
 SceneManager *      CreateSceneManager();                                //创建场景管理器
 void                  DestorySceneManager(SceneManager *pM);           //销毁场景管理器
+unsigned int         SceneManagerAddScene(SceneManager *pM,           //添加场景
+                                           Scene *pScene);
 void                  SceneManagerDoCal(SceneManager *pM);             //计算
 void                  SceneManagerDoDraw(SceneManager *pM);            //绘制
 void                  SceneManagerDoEvents(SceneManager *pM);          //执行事件
@@ -159,8 +161,10 @@ void                   SpriteDoCal(Sprite *pSprite);
 void                   SpriteDoDraw(Sprite *Sprite);
 void                   SpriteDoEvents(Sprite *Sprite);
 
-SpriteManager *     CreateSpriteManager();
-void                   DestorySpriteManager(SpriteManager *pM);
+SpriteManager *     CreateSpriteManager();                                //创建精灵管理器
+void                   DestorySpriteManager(SpriteManager *pM);          //销毁精灵管理器
+Sprite *               SpriteManagerRemove(SpriteManager *pM,            //移除精灵
+                                           unsigned int ID);
 void                   SpriteManagerDoCal(SpriteManager *pM);
 void                   SpriteManagerDoDraw(SpriteManager *pM);
 void                   SpriteManagerDoEvents(SpriteManager *pM);
