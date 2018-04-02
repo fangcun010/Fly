@@ -55,6 +55,9 @@ void Display()
 
 void EngineInit()
 {
+	pEngine=CreateEngine();
+
+
     Shader *vShader=CreateShader(FALSE);
     Shader *fShader=CreateShader(TRUE);
 
@@ -72,13 +75,17 @@ void EngineInit()
 
     LoadProgram(pProgram,vShader,fShader);
 
-    glUseProgram(pProgram->ID);
+    ProgramManager *pProgramManager=pEngine->pProgramManager;
 
-    Vector *pVt=pEngine->pSceneManager->pSceneVt;
+    pProgramManager->AddProgram(pProgramManager,pProgram);
+
+
+
+    SceneManager *pSceneManager=pEngine->pSceneManager;
 
     InitGame();
 
-    vtAddBack(pVt,pMainMenuScene);
+    pSceneManager->AddScene(pSceneManager,pMainMenuScene);
 }
 
 int main(int argc,char *argv[])
@@ -101,8 +108,6 @@ int main(int argc,char *argv[])
 	}
 
 	ShowOpenGLVersion();
-
-	pEngine=CreateEngine();
 
 	EngineInit();
 

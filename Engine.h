@@ -85,12 +85,15 @@ typedef struct tagSceneManager                                  //场景管理�
 {
     Vector *pSceneVt;                                               //场景向量
 
+    UIntObjFuncParam AddScene;                                         //添加场景
+    PointObjFuncUInt RemoveScene;                                     //移除场景
+    ObjFunc DoInit;                                                     //执行初始化
     ObjFunc DoCal;                                                      //执行计算
     ObjFunc DoDraw;                                                     //执行绘制
     ObjFunc DoEvents;                                                   //执行事件
 } SceneManager;
 
-typedef struct tagEvent                                          //事件
+typedef struct tagEvent                                           //事件
 {
     unsigned int ID;
     int nEventID;                                                   //事件ID
@@ -135,6 +138,8 @@ typedef struct tagEngine                                          //引擎
 {
     SceneManager *pSceneManager;                                 //场景管理器
     TextureManager *pTextureManager;                            //纹理管理器
+    ShaderManager *pShaderManager;                                //着色器管理器
+    ProgramManager *pProgramManager;                            //着色程序管理器
     SoundManager *pSoundManager;                                 //声音管理器
 
     ObjFunc WaitForFrameTime;                                     //等待刷新时间
@@ -155,6 +160,7 @@ unsigned int         SceneManagerAddScene(SceneManager *pM,           //添加�
                                            Scene *pScene);
 Scene *               SceneManagerRemoveScene(SceneManager *pM,        //移除场景
                                     unsigned int ID);
+void                  SceneManagerDoInit(SceneManager *pM);            //执行初始化
 void                  SceneManagerDoCal(SceneManager *pM);             //计算
 void                  SceneManagerDoDraw(SceneManager *pM);            //绘制
 void                  SceneManagerDoEvents(SceneManager *pM);          //执行事件
@@ -212,11 +218,10 @@ ProgramManager *    CreateProgramManager();                          //创建着
 void                  DestoryProgramManager(ProgramManager *pM);    //销毁着色程序管理器
 unsigned int         ProgramManagerAddProgram(ProgramManager *pM,  //添加着色器程序
                                         Program *pProgram);
-Program *             ProgramManagerGet(ProgramManager *pM,         //着色器程序获取
+Program *             ProgramManagerGetProgram(ProgramManager *pM,         //着色器程序获取
                                         unsigned int ID);
 void                  ProgramManagerUseProgram(ProgramManager *pM,  //使用着色器程序
                                             unsigned int ID);
-
 
 SoundManager *      CreateSoundManager();                                   //创建声音管理器
 void                  DestorySoundManager(SoundManager *pM);               //销毁声音管理器

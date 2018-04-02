@@ -13,6 +13,8 @@ Engine *CreateEngine()
 
     pEngine->pSceneManager=CreateSceneManager();
     pEngine->pTextureManager=CreateTextureManager();
+    pEngine->pShaderManager=CreateShaderManager();
+    pEngine->pProgramManager=CreateProgramManager();
     pEngine->pSoundManager=CreateSoundManager();
 
     pEngine->DoScenes=EngineDoScenes;
@@ -50,6 +52,10 @@ SceneManager *CreateSceneManager()
 
     pM->pSceneVt=vtCreate();
 
+    pM->AddScene=SceneManagerAddScene;
+    pM->RemoveScene=SceneManagerRemoveScene;
+
+    pM->DoInit=SceneManagerDoInit;
     pM->DoCal=SceneManagerDoCal;
     pM->DoDraw=SceneManagerDoDraw;
     pM->DoEvents=SceneManagerDoEvents;
@@ -84,6 +90,18 @@ unsigned int SceneManagerAddScene(SceneManager *pM,
     vtAddBack(pVt,pScene);
 
     return pScene->ID;
+}
+
+void SceneManagerDoInit(SceneManager *pM)
+{
+    Vector *pVt=pM->pSceneVt;
+
+    for(int i=0;i<vtCount(pM->pSceneVt);i++)
+    {
+        Scene *pScene=vtGet(pM->pSceneVt,i);
+
+        pScene->DoInit(pScene);
+    }
 }
 
 void SceneManagerDoCal(SceneManager *pM)
@@ -486,7 +504,7 @@ ProgramManager *CreateProgramManager()
     pM->pProgramVt=vtCreate();
 
     pM->AddProgram=ProgramManagerAddProgram;
-    pM->GetProgram=ProgramManagerGet;
+    pM->GetProgram=ProgramManagerGetProgram;
     pM->UseProgram=ProgramManagerUseProgram;
 
     return pM;
@@ -516,19 +534,26 @@ unsigned int ProgramManagerAddProgram(ProgramManager *pM,
     return ret;
 }
 
-Program *ProgramManagerGet(ProgramManager *pM,
-                           unsigned int index)
+Program *ProgramManagerGetProgram(ProgramManager *pM,
+                           unsigned int ID)
 {
     Vector *pVt=pM->pProgramVt;
 
-    return vtGet(pVt,index);
+    for(int i=0;i<vtCount(pVt);i++)
+    {
+        Program *pProgram=vtGet(pVt,i);
+
+        if(pProgram->ID==ID)
+            return pProgram;
+    }
+
+    return NULL;
 }
 
 void ProgramManagerUseProgram(ProgramManager *pM,
-                              unsigned int index)
+                              unsigned int ID)
 {
-    Vector *pVt=pM->pProgramVt;
-    Program *program=vtGet(pVt,index);
+    Program *program=ProgramManagerGetProgram(pM,ID);
 
     glUseProgram(program->ID);
 }
