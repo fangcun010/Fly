@@ -21,6 +21,8 @@ void InitGame()
     BackgroundTexture=pTextureManager->AddTexture(pTextureManager,pTexture);
 }
 
+
+
 void MainMenuSceneDoCal(Scene *pScene)
 {
   //  TextureManager *pM=pEngine->pTextureManager;

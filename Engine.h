@@ -24,6 +24,7 @@ typedef struct tagSprite                                   //精灵
 {
     unsigned int ID;
 
+    ObjFunc DoInit;                                           //执行初始化
     ObjFunc DoCal;                                            //执行计算
     ObjFunc DoDraw;                                           //执行绘制
     ObjFunc DoEvents;                                        //执行事件　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　//执行事件
@@ -34,6 +35,8 @@ typedef struct tagSpriteManager                      //精灵管理器
     Vector *pSpriteVt;                                   //精灵向量
 
     PointObjFuncUInt RemoveSprite;
+
+    ObjFunc DoInit;
     ObjFunc DoCal;                                        //计算
     ObjFunc DoDraw;                                       //绘制
     ObjFunc DoEvents;                                     //事件
@@ -70,7 +73,9 @@ typedef struct tagScene                                    //场景
 {
     unsigned int ID;
 
-    SpriteManager *pSpriteManager;                       //精灵向量
+    SpriteManager *pSpriteManager;                          //精灵向量
+
+    ObjFunc DoInit;                                          //场景初始化
     ObjFunc DoCal;                                           //执行计算
     ObjFunc DoDraw;                                          //执行绘制
     ObjFunc DoEvents;                                       //执行事件
@@ -156,12 +161,14 @@ void                  SceneManagerDoEvents(SceneManager *pM);          //执行�
 
 Scene *               CreateScene();                                         //创建场景
 void                  DestoryScene(Scene *pScene);                        //销毁场景
+void                  SceneDoInit(Scene *pScene);                           //场景初始化
 void                  SceneDoCal(Scene *pScene);                           //场景计算
 void                  SceneDoDraw(Scene *pScene);                          //场景绘制
 void                  SceneDoEvents(Scene *pScene);                       //场景执行事件
 
 Sprite *              CreateSprite();
 void                   DestorySprite(Sprite *pSprite);
+void                   SpriteDoInit(Sprite *pSprite);
 void                   SpriteDoCal(Sprite *pSprite);
 void                   SpriteDoDraw(Sprite *Sprite);
 void                   SpriteDoEvents(Sprite *Sprite);
@@ -172,6 +179,7 @@ unsigned int          SpriteManagerAddSprite(SpriteManager *pM,
                                         Sprite *pSprite);
 Sprite *               SpriteManagerRemoveSprite(SpriteManager *pM,     //移除精灵
                                            unsigned int ID);
+void                   SpriteManagerDoInit(SpriteManager *pM);
 void                   SpriteManagerDoCal(SpriteManager *pM);
 void                   SpriteManagerDoDraw(SpriteManager *pM);
 void                   SpriteManagerDoEvents(SpriteManager *pM);
@@ -180,7 +188,7 @@ TextureManager *   CreateTextureManager();                                  //�
 void                  DestoryTextureManager(TextureManager *pM);           //销毁纹理管理器
 unsigned int        TextureManagerAddTexture(TextureManager *pM,          //添加纹理
                                                     Texture *pTexture);
-Texture *            TextureManagerRemoveTexture(TextureManager *pM,       //移除纹理
+Texture *            TextureManagerRemoveTexture(TextureManager *pM,      //移除纹理
                                                  unsigned int ID);
 Texture *            TextureManagerGetTexture(TextureManager *pM,   //获取纹理
                                                     unsigned int ID);
@@ -191,10 +199,10 @@ Shader *             CreateShader(BOOL bFrag);                            //创�
 void                  DestoryShader(Shader *pShader);                    //销毁着色器
 
 ShaderManager *    CreateShaderManager();                               //创建着色器管理器
-void                  DestoryShaderManager(ShaderManager *pM);        //销毁着色器管理器
-unsigned int        ShaderManagerAddShader(ShaderManager *pM,      //添加着色器
+void                  DestoryShaderManager(ShaderManager *pM);         //销毁着色器管理器
+unsigned int        ShaderManagerAddShader(ShaderManager *pM,         //添加着色器
                                            Shader *pShader);
-Shader *             ShaderManagerGetShader(ShaderManager *pM,       //获取着色器
+Shader *             ShaderManagerGetShader(ShaderManager *pM,        //获取着色器
                                             unsigned int ID);
 
 Program *            CreateProgram();                                   //创建着色器程序
@@ -210,16 +218,16 @@ void                  ProgramManagerUseProgram(ProgramManager *pM,  //使用着�
                                             unsigned int ID);
 
 
-SoundManager *      CreateSoundManager();                               //创建声音管理器
-void                  DestorySoundManager(SoundManager *pM);          //销毁声音管理器
+SoundManager *      CreateSoundManager();                                   //创建声音管理器
+void                  DestorySoundManager(SoundManager *pM);               //销毁声音管理器
 
-unsigned int        MakeID();                                            //产生一个不重复的ID值
-unsigned long       GetTickCount();                                                     //获取毫秒数
-BOOL                  LoadTexture(Texture *pTexture,const char *strFile);        //载入纹理
-const char *         LoadTextFile(const char *strFile);                              //读取文本文件
+unsigned int        MakeID();                                                 //产生一个不重复的ID值
+unsigned long       GetTickCount();                                          //获取毫秒数
+BOOL                  LoadTexture(Texture *pTexture,const char *strFile); //载入纹理
+const char *         LoadTextFile(const char *strFile);                            //读取文本文件
 BOOL                  LoadShader(Shader *pShader,const char *strFile,             //载入着色器
                                                     BOOL bFrag);
-BOOL                  LoadProgram(Program *pProgram,Shader *pVertexShader,      //载入着色程序
+BOOL                  LoadProgram(Program *pProgram,Shader *pVertexShader,       //载入着色程序
                                         Shader *pFragShader);
 void                  ShowImage(TextureManager *pM,unsigned int TexID,            //显示图像
                                         int x,int y,int sx,int sy,int w,int h);

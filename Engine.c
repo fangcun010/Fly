@@ -122,6 +122,11 @@ void DestorySceneManager(SceneManager *pM)
     free(pM);
 }
 
+void SpriteDoInit(Sprite *pSprite)
+{
+
+}
+
 void SpriteDoCal(Sprite *pSprite)
 {
 
@@ -142,6 +147,8 @@ Sprite *CreateSprite()
     Sprite *pSprite=malloc(sizeof(Sprite));
 
     pSprite->ID=MakeID();
+
+    pSprite->DoInit=SpriteDoInit;
     pSprite->DoCal=SpriteDoCal;
     pSprite->DoDraw=SpriteDoDraw;
     pSprite->DoEvents=SpriteDoEvents;
@@ -159,6 +166,8 @@ SpriteManager *CreateSpriteManager()
     pM->pSpriteVt=vtCreate();
 
     pM->RemoveSprite=SpriteManagerRemoveSprite;
+
+    pM->DoInit=SpriteManagerDoInit;
     pM->DoCal=SpriteManagerDoCal;
     pM->DoDraw=SpriteManagerDoDraw;
     pM->DoEvents=SpriteManagerDoEvents;
@@ -189,6 +198,16 @@ unsigned int SpriteManagerAddSprite(SpriteManager *pM,
     vtAddBack(pVt,pSprite);
 
     return pSprite->ID;
+}
+
+void SpriteManagerDoInit(SpriteManager *pM)
+{
+    for(int i=0;i<vtCount(pM->pSpriteVt);i++)
+    {
+        Sprite *pSprite=vtGet(pM->pSpriteVt,i);
+
+        pSprite->DoInit(pSprite);
+    }
 }
 
 void SpriteManagerDoCal(SpriteManager *pM)
@@ -240,6 +259,13 @@ Scene *CreateScene()
     pScene->pSpriteManager=CreateSpriteManager();
 
     return pScene;
+}
+
+void SceneDoInit(Scene *pScene)
+{
+    SpriteManager *pM=pScene->pSpriteManager;
+
+    pM->DoInit(pM);
 }
 
 void SceneDoCal(Scene *pScene)
