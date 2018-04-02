@@ -531,6 +531,22 @@ unsigned int ProgramManagerAddProgram(ProgramManager *pM,
     return pProgram->ID;
 }
 
+Program *ProgramManagerRemoveProgram(ProgramManager *pM,
+                                unsigned int ID)
+{
+    Vector *pVt=pM->pProgramVt;
+
+    for(int i=0;i<vtCount(pVt);i++)
+    {
+        Program *pProgram=vtGet(pVt,i);
+
+        if(pProgram->ID==ID)
+            return pProgram;
+    }
+
+    return NULL;
+}
+
 Program *ProgramManagerGetProgram(ProgramManager *pM,
                            unsigned int ID)
 {
@@ -552,7 +568,7 @@ void ProgramManagerUseProgram(ProgramManager *pM,
 {
     Program *program=ProgramManagerGetProgram(pM,ID);
 
-    glUseProgram(program->ID);
+    glUseProgram(program->ProgramID);
 }
 
 unsigned long GetTickCount()

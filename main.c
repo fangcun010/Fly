@@ -111,8 +111,6 @@ int main(int argc,char *argv[])
 
 	EngineInit();
 
-	glutSwapBuffers();
-
 	while(TRUE)
 	{
         glutMainLoopEvent();

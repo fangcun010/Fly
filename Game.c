@@ -18,6 +18,12 @@ void InitGame()
 
     LoadTexture(pTexture,"res/Background.RGBA");
 
+   // glBindTexture(GL_TEXTURE_2D,pTexture->TexID);
+   glEnable(GL_BLEND);
+glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+glPointSize(10);
+glEnable (GL_POINT_SMOOTH);
+glHint (GL_POINT_SMOOTH, GL_NICEST);
     BackgroundTexture=pTextureManager->AddTexture(pTextureManager,pTexture);
 }
 

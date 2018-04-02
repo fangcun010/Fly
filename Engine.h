@@ -218,6 +218,9 @@ ProgramManager *    CreateProgramManager();                          //创建着
 void                  DestoryProgramManager(ProgramManager *pM);    //销毁着色程序管理器
 unsigned int         ProgramManagerAddProgram(ProgramManager *pM,  //添加着色器程序
                                         Program *pProgram);
+Program *             ProgramManagerRemoveProgram(                    //移除着色器程序
+                                                  ProgramManager *pM,
+                                        unsigned int ID);
 Program *             ProgramManagerGetProgram(ProgramManager *pM,         //着色器程序获取
                                         unsigned int ID);
 void                  ProgramManagerUseProgram(ProgramManager *pM,  //使用着色器程序
