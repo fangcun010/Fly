@@ -3,6 +3,9 @@
 
 #include "Engine.h"
 
+#define 				WND_W						400
+#define				WND_H						600
+
 extern Engine *pEngine;                                    //游戏引擎
 
 extern Scene *pMainMenuScene;                            //主菜单场景

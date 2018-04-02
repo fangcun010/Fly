@@ -1,8 +1,10 @@
 #include <GL/gl.h>
+#include "Engine.h"
 #include "Game.h"
 
 Scene *pMainMenuScene;
-unsigned int BackgroundTexture;
+Texture *pBackgroundTexture;
+Texture *pLogoTexture;
 
 void InitGame()
 {
@@ -14,20 +16,15 @@ void InitGame()
     pMainMenuScene->DoDraw=MainMenuSceneDoDraw;
     pMainMenuScene->DoEvents=MainMenuSceneDoEvents;
 
-    Texture *pTexture=CreateTexture();
+    pBackgroundTexture=CreateTexture();
+    pLogoTexture=CreateTexture();
 
-    LoadTexture(pTexture,"res/Background.RGBA");
+    LoadTexture(pBackgroundTexture,"res/Background.RGBA");
+    LoadTexture(pLogoTexture,"res/Logo.RGBA");
 
-   // glBindTexture(GL_TEXTURE_2D,pTexture->TexID);
-   glEnable(GL_BLEND);
-glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-glPointSize(10);
-glEnable (GL_POINT_SMOOTH);
-glHint (GL_POINT_SMOOTH, GL_NICEST);
-    BackgroundTexture=pTextureManager->AddTexture(pTextureManager,pTexture);
+    pTextureManager->AddTexture(pTextureManager,pBackgroundTexture);
+    pTextureManager->AddTexture(pTextureManager,pLogoTexture);
 }
-
-
 
 void MainMenuSceneDoCal(Scene *pScene)
 {
@@ -38,7 +35,10 @@ void MainMenuSceneDoCal(Scene *pScene)
 
 void MainMenuSceneDoDraw(Scene *pScene)
 {
+    TextureManager *pM=pEngine->pTextureManager;
 
+    ShowImage(pBackgroundTexture,0,0,WND_W,WND_H);
+    ShowImage(pLogoTexture,70,500,256,64);
 }
 
 void MainMenuSceneDoEvents(Scene *pScene)

@@ -20,6 +20,11 @@ Engine *CreateEngine()
     pEngine->DoScenes=EngineDoScenes;
     pEngine->WaitForFrameTime=WaitForFrameTime;
 
+    glGenVertexArrays(1,&pEngine->VAO);
+    glGenBuffers(1,&pEngine->VBO);
+    glBindVertexArray(&pEngine->VAO);
+    glBindBuffer(GL_ARRAY_BUFFER,pEngine->VBO);
+
     return pEngine;
 }
 
@@ -715,16 +720,33 @@ const char *LoadTextFile(const char *strFile)
     return pMem;
 }
 
-static GLfloat ShowImageVts[4]=
+static GLfloat ShowImageVts[]=
 {
     0.0f,0.0f           ,0.0f,0.0f,
-    0.0f,0.0f           ,1.0f,0.0f,
-    0.0f,0.0f           ,1.0f,1.0f,
-    0.0f,0.0f           ,0.0f,1.0f
+    200.0f,0.0f           ,1.0f,0.0f,
+    200.0f,200.0f           ,1.0f,1.0f,
+    0.0f,200.0f           ,0.0f,1.0f
 };
 
-void ShowImage(TextureManager *pM,unsigned int TexID,int x,int y,
-                    int sx,int sy,int w,int h)
+void ShowImage(Texture *pTexture,int x,int y,int w,int h)
 {
+    glBindTexture(GL_TEXTURE_2D,pTexture->TexID);
 
+    ShowImageVts[0]=x;
+    ShowImageVts[1]=y;
+    ShowImageVts[4]=x+w;
+    ShowImageVts[5]=y;
+    ShowImageVts[8]=x+w;
+    ShowImageVts[9]=y+h;
+    ShowImageVts[12]=x;
+    ShowImageVts[13]=y+h;
+
+    glBufferData(GL_ARRAY_BUFFER,sizeof(ShowImageVts),
+                    ShowImageVts,GL_STATIC_DRAW);
+    glVertexAttribPointer(0,2,GL_FLOAT,GL_FALSE,4*sizeof(GLfloat),(GLvoid *)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,4*sizeof(GLfloat),(GLvoid *)(2*sizeof(GLfloat)));
+    glEnableVertexAttribArray(1);
+
+    glDrawArrays(GL_TRIANGLE_FAN,0,4);
 }

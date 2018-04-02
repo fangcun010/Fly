@@ -9,4 +9,5 @@ out vec4 Color;
 void main()
 {
 	Color=texture(tex,TexCoord.st);
+	if(Color.a==0) discard;
 }

@@ -136,6 +136,9 @@ typedef struct tagProgramManager                                //着色程序�
 
 typedef struct tagEngine                                          //引擎
 {
+    unsigned int VAO;
+    unsigned int VBO;
+
     SceneManager *pSceneManager;                                 //场景管理器
     TextureManager *pTextureManager;                            //纹理管理器
     ShaderManager *pShaderManager;                                //着色器管理器
@@ -237,7 +240,7 @@ BOOL                  LoadShader(Shader *pShader,const char *strFile,           
                                                     BOOL bFrag);
 BOOL                  LoadProgram(Program *pProgram,Shader *pVertexShader,       //载入着色程序
                                         Shader *pFragShader);
-void                  ShowImage(TextureManager *pM,unsigned int TexID,            //显示图像
-                                        int x,int y,int sx,int sy,int w,int h);
+void                  ShowImage(Texture *pTexture,            //显示图像
+                                        int x,int y,int w,int h);
 
 #endif // SGENGINE_H_INCLUDED

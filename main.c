@@ -6,9 +6,6 @@
 #include "Engine.h"
 #include "Game.h"
 
-#define 				WND_W						400
-#define				WND_H						600
-
 Engine *pEngine;
 
 void ShowOpenGLVersion()
@@ -29,34 +26,11 @@ GLfloat vts[]={
     300.0f,20.0f,1.0f,1.0f,1.0f
 };
 
-void Display()
-{
-	glClearColor(0,0,0,0);
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	GLuint VAO,VBO;
-
-	glGenVertexArrays(1,&VAO);
-	glGenBuffers(1,&VBO);
-    glBindVertexArray(VAO);
-	glBindBuffer(GL_ARRAY_BUFFER,VBO);
-
-	glBufferData(GL_ARRAY_BUFFER,sizeof(vts),vts,GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0,2,GL_FLOAT,GL_FALSE,5*sizeof(GLfloat),(GLvoid *)0);
-    glEnableVertexAttribArray (0);
-	glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,5*sizeof(GLfloat),(GLvoid *)(2*sizeof(GLfloat)));
-    glEnableVertexAttribArray (1);
-
-	glDrawArrays(GL_TRIANGLES,0,3);
-
-	glutSwapBuffers();
-}
-
 void EngineInit()
 {
 	pEngine=CreateEngine();
 
+	glPixelStorei(GL_UNPACK_ALIGNMENT,1);
 
     Shader *vShader=CreateShader(FALSE);
     Shader *fShader=CreateShader(TRUE);
@@ -75,11 +49,15 @@ void EngineInit()
 
     LoadProgram(pProgram,vShader,fShader);
 
+    int loc=glGetUniformLocation(pProgram->ProgramID,"tex");
+
     ProgramManager *pProgramManager=pEngine->pProgramManager;
 
     unsigned int ProgramID=pProgramManager->AddProgram(pProgramManager,pProgram);
 
     pProgramManager->UseProgram(pProgramManager,ProgramID);
+
+    glUniform1ui(loc,0);
 
     SceneManager *pSceneManager=pEngine->pSceneManager;
 
@@ -96,8 +74,6 @@ int main(int argc,char *argv[])
 
 	glutInitWindowSize(WND_W,WND_H);
 	glutCreateWindow("Fly");
-
-	glutDisplayFunc(Display);
 
 	GLenum err=glewInit();
 
