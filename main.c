@@ -77,9 +77,9 @@ void EngineInit()
 
     ProgramManager *pProgramManager=pEngine->pProgramManager;
 
-    pProgramManager->AddProgram(pProgramManager,pProgram);
+    unsigned int ProgramID=pProgramManager->AddProgram(pProgramManager,pProgram);
 
-
+    pProgramManager->UseProgram(pProgramManager,ProgramID);
 
     SceneManager *pSceneManager=pEngine->pSceneManager;
 

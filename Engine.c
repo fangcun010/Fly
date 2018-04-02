@@ -492,8 +492,8 @@ Program *CreateProgram()
 
 void DestoryProgram(Program *pProgram)
 {
-    if(pProgram->ID)
-        glDeleteProgram(pProgram->ID);
+    if(pProgram->ProgramID)
+        glDeleteProgram(pProgram->ProgramID);
     free(pProgram);
 }
 
@@ -504,6 +504,7 @@ ProgramManager *CreateProgramManager()
     pM->pProgramVt=vtCreate();
 
     pM->AddProgram=ProgramManagerAddProgram;
+
     pM->GetProgram=ProgramManagerGetProgram;
     pM->UseProgram=ProgramManagerUseProgram;
 
@@ -525,13 +526,9 @@ unsigned int ProgramManagerAddProgram(ProgramManager *pM,
 {
     Vector *pVt=pM->pProgramVt;
 
-    unsigned int ret;
-
-    ret=vtCount(pVt);
-
     vtAddBack(pVt,pProgram);
 
-    return ret;
+    return pProgram->ID;
 }
 
 Program *ProgramManagerGetProgram(ProgramManager *pM,
@@ -635,7 +632,7 @@ BOOL LoadShader(Shader *pShader,const char *strFile,BOOL bFrag)
 
     free(pText);
 
-    pShader->ID=shader;
+    pShader->ShaderID=shader;
 
     return TRUE;
 }
@@ -653,8 +650,8 @@ BOOL LoadProgram(Program *pProgram,Shader *pVertexShader,Shader *pFragShader)
 
     if(!program) return FALSE;
 
-    glAttachShader(program,pVertexShader->ID);
-    glAttachShader(program,pFragShader->ID);
+    glAttachShader(program,pVertexShader->ShaderID);
+    glAttachShader(program,pFragShader->ShaderID);
 
     glLinkProgram(program);
 
@@ -671,7 +668,7 @@ BOOL LoadProgram(Program *pProgram,Shader *pVertexShader,Shader *pFragShader)
         return FALSE;
     }
 
-    pProgram->ID=program;
+    pProgram->ProgramID=program;
 
     return TRUE;
 }
