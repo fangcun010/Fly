@@ -66,6 +66,11 @@ void EngineInit()
     pSceneManager->AddScene(pSceneManager,pMainMenuScene);
 }
 
+void Mouse(int button,int state,int x,int y)
+{
+
+}
+
 int main(int argc,char *argv[])
 {
 	glutInit(&argc,argv);
@@ -74,6 +79,8 @@ int main(int argc,char *argv[])
 
 	glutInitWindowSize(WND_W,WND_H);
 	glutCreateWindow("Fly");
+
+	glutMouseFunc(Mouse);
 
 	GLenum err=glewInit();
 
