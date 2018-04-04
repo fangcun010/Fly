@@ -2,6 +2,7 @@
 #define SGENGINE_H_INCLUDED
 
 #include "Vector.h"
+#include "Event.h"
 
 #define           TRUE                      1
 #define           FALSE                     0
@@ -231,6 +232,12 @@ void                  ProgramManagerUseProgram(ProgramManager *pM,  //使用着�
 
 SoundManager *      CreateSoundManager();                                   //创建声音管理器
 void                  DestorySoundManager(SoundManager *pM);               //销毁声音管理器
+
+Event *              CreateEvent();                                           //创建事件
+void                  DestoryEvent(Event *pEvent);                          //销毁事件
+
+EventManager *      CreateEventManager();                                   //创建事件管理器
+void                 DestoryEventManager();                                  //销毁事件管理器
 
 unsigned int        MakeID();                                                 //产生一个不重复的ID值
 unsigned long       GetTickCount();                                          //获取毫秒数

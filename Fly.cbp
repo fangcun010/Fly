@@ -42,6 +42,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Engine.h" />
+		<Unit filename="Event.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Event.h" />
 		<Unit filename="Game.c">
 			<Option compilerVar="CC" />
 		</Unit>

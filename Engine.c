@@ -576,6 +576,34 @@ void ProgramManagerUseProgram(ProgramManager *pM,
     glUseProgram(program->ProgramID);
 }
 
+Event *CreateEvent()
+{
+    Event *pEvent=malloc(sizeof(Event));
+
+    pEvent->ID=MakeID();
+    pEvent->nEventID=EVENT_UNDEFINED;
+
+    return pEvent;
+}
+
+void DestoryEvent(Event *pEvent)
+{
+    if(pEvent->pTag) free(pEvent->pTag);
+    free(pEvent);
+}
+
+EventManager *CreateEventManager()
+{
+    EventManager *pM=malloc(sizeof(EventManager));
+
+    return pM;
+}
+
+void DestoryEventManager(EventManager *pM)
+{
+
+}
+
 unsigned long GetTickCount()
 {
     struct timeval t;
