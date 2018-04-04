@@ -2,11 +2,13 @@
 #define SGENGINE_H_INCLUDED
 
 #include "Vector.h"
-#include "Event.h"
 
 #define           TRUE                      1
 #define           FALSE                     0
 #define           FRAMETIME                 33
+
+#define           EVENT_UNDEFINED           5000
+#define           EVENT_CLICK               5001
 
 typedef int BOOL;
 
@@ -94,14 +96,21 @@ typedef struct tagSceneManager                                  //场景管理�
     ObjFunc DoEvents;                                                   //执行事件
 } SceneManager;
 
-typedef struct tagEvent                                           //事件
+typedef struct tagEvent                                             //事件
 {
     unsigned int ID;
-    int nEventID;                                                   //事件ID
+    int nEventID;                                                    //事件ID
     void *pTag;                                                      //事件附加信息
 } Event;
 
-typedef struct tagEventManager                                  //事件管理器
+typedef struct tagClickEvent                                       //点击事件
+{
+    int Button;
+    int x,y;
+    BOOL bDown;
+} ClickEvent;
+
+typedef struct tagEventManager                                    //事件管理器
 {
     Vector *pEventVt;                                               //事件向量
 
@@ -236,8 +245,16 @@ void                  DestorySoundManager(SoundManager *pM);               //销
 Event *              CreateEvent();                                           //创建事件
 void                  DestoryEvent(Event *pEvent);                          //销毁事件
 
+Event *              CreateClickEvent();                                     //创建点击事件
+
 EventManager *      CreateEventManager();                                   //创建事件管理器
 void                 DestoryEventManager();                                  //销毁事件管理器
+unsigned int        EventManagerAddEvent(EventManager *pM,                //添加事件
+                                          Event *pEvent);
+Event *              EventManagerRemoveEvent(EventManager *pM,             //移除事件
+                                        unsigned int ID);
+Event *              EventManagerGetEvent(EventManager *pM,                //获取事件
+                                          unsigned int ID);
 
 unsigned int        MakeID();                                                 //产生一个不重复的ID值
 unsigned long       GetTickCount();                                          //获取毫秒数

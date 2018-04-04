@@ -592,12 +592,71 @@ void DestoryEvent(Event *pEvent)
     free(pEvent);
 }
 
+Event *CreateClickEvent()
+{
+    Event *pEvent=CreateEvent();
+    ClickEvent *pClickEvent=malloc(sizeof(ClickEvent));
+
+    pEvent->nEventID=EVENT_CLICK;
+    pEvent->pTag=pClickEvent;
+
+    return pEvent;
+}
+
 EventManager *CreateEventManager()
 {
     EventManager *pM=malloc(sizeof(EventManager));
 
+    pM->pEventVt=vtCreate();
+
     return pM;
 }
+
+unsigned int EventManagerAddEvent(EventManager *pM,
+                                  Event *pEvent)
+{
+    Vector *pVt=pM->pEventVt;
+
+    vtAddBack(pVt,pEvent);
+
+    return pEvent->ID;
+}
+
+Event *EventManagerRemoveEvent(EventManager *pM,
+                               unsigned int ID)
+{
+    Vector *pVt=pM->pEventVt;
+
+    for(int i=0;i<vtCount(pVt);i++)
+    {
+        Event *pEvent=vtGet(pVt,i);
+
+        if(pEvent->ID==ID)
+        {
+            vtRemove(pVt,i);
+            return pEvent;
+        }
+    }
+
+    return NULL;
+}
+
+Event *EventManagerGetEvent(EventManager *pM,
+                            unsigned int ID)
+{
+    Vector *pVt=pM->pEventVt;
+
+    for(int i=0;i<vtCount(pVt);i++)
+    {
+        Event *pEvent=vtGet(pVt,i);
+
+        if(pEvent->ID==ID)
+            return pEvent;
+    }
+
+    return NULL;
+}
+
 
 void DestoryEventManager(EventManager *pM)
 {
