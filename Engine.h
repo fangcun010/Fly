@@ -76,7 +76,9 @@ typedef struct tagScene                                    //场景
 {
     unsigned int ID;
 
-    SpriteManager *pSpriteManager;                          //精灵向量
+    BOOL bDoEvents;                                          //是否执行事件
+
+    SpriteManager *pSpriteManager;                         //精灵向量
 
     ObjFunc DoInit;                                          //场景初始化
     ObjFunc DoCal;                                           //执行计算
@@ -114,6 +116,13 @@ typedef struct tagEventManager                                    //事件管理
 {
     Vector *pEventVt;                                               //事件向量
 
+    UIntObjFunc GetEventCount;                                     //获取事件个数
+
+    UIntObjFuncParam AddEvent;                                     //添加事件
+    PointObjFuncUInt RemoveEvent;                                 //移除事件
+    PointObjFuncUInt GetEvent;                                     //获取事件
+
+    ObjFunc DestoryAllEvents;                                      //销毁所有事件
 } EventManager;
 
 typedef struct tagShader                                           //着色器
@@ -154,9 +163,10 @@ typedef struct tagEngine                                          //引擎
     ShaderManager *pShaderManager;                                //着色器管理器
     ProgramManager *pProgramManager;                            //着色程序管理器
     SoundManager *pSoundManager;                                 //声音管理器
+    EventManager *pEventManager;                                 //事件管理器
 
     ObjFunc WaitForFrameTime;                                     //等待刷新时间
-    ObjFunc DoScenes;                                               //执行场景操作
+    ObjFunc DoScenes;                                              //执行场景操作
 
     unsigned long nLastFrameTime;                                //上一次
     BOOL bLeaveLoop;                                                //是否跳出游戏循环
@@ -255,6 +265,8 @@ Event *              EventManagerRemoveEvent(EventManager *pM,             //移
                                         unsigned int ID);
 Event *              EventManagerGetEvent(EventManager *pM,                //获取事件
                                           unsigned int ID);
+void                 EventManagerDestoryAllEvents(EventManager *pM);      //移除所有事件
+unsigned int        EventManagerGetEventCount(EventManager *pM);          //获取事件个数
 
 unsigned int        MakeID();                                                 //产生一个不重复的ID值
 unsigned long       GetTickCount();                                          //获取毫秒数

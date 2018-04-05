@@ -16,6 +16,7 @@ Engine *CreateEngine()
     pEngine->pShaderManager=CreateShaderManager();
     pEngine->pProgramManager=CreateProgramManager();
     pEngine->pSoundManager=CreateSoundManager();
+    pEngine->pEventManager=CreateEventManager();
 
     pEngine->DoScenes=EngineDoScenes;
     pEngine->WaitForFrameTime=WaitForFrameTime;
@@ -609,6 +610,12 @@ EventManager *CreateEventManager()
 
     pM->pEventVt=vtCreate();
 
+    pM->GetEventCount=EventManagerGetEventCount;
+    pM->AddEvent=EventManagerAddEvent;
+    pM->GetEvent=EventManagerGetEvent;
+    pM->RemoveEvent=EventManagerRemoveEvent;
+    pM->DestoryAllEvents=EventManagerDestoryAllEvents;
+
     return pM;
 }
 
@@ -657,6 +664,22 @@ Event *EventManagerGetEvent(EventManager *pM,
     return NULL;
 }
 
+void EventManagerDestoryAllEvents(EventManager *pM)
+{
+    Vector *pVt=pM->pEventVt;
+
+    for(int i=0;i<vtCount(pVt);i++)
+        DestoryEvent(vtGet(pVt,i));
+
+    pVt->nCount=0;
+}
+
+unsigned int EventManagerGetEventCount(EventManager *pM)
+{
+    Vector *pVt=pM->pEventVt;
+
+    return vtCount(pVt);
+}
 
 void DestoryEventManager(EventManager *pM)
 {

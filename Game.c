@@ -2,6 +2,7 @@
 #include "Engine.h"
 #include "Game.h"
 
+//主菜单场景
 Scene *pMainMenuScene;
 Texture *pBackgroundTexture;
 Texture *pLogoTexture;
@@ -9,6 +10,9 @@ Texture *pStartGameTexture;
 Texture *pSetGameTexture;
 Texture *pAboutGameTexture;
 Texture *pExitGameTexture;
+
+//关于场景
+Scene *pAboutScene;
 
 void InitGame()
 {
@@ -68,5 +72,6 @@ void MainMenuSceneDoDraw(Scene *pScene)
 
 void MainMenuSceneDoEvents(Scene *pScene)
 {
-
+    if(pEventManager->GetEventCount(pEventManager))
+        printf("1\n");
 }

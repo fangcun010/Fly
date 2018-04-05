@@ -7,6 +7,7 @@
 #include "Game.h"
 
 Engine *pEngine;
+EventManager *pEventManager;
 
 void ShowOpenGLVersion()
 {
@@ -20,15 +21,11 @@ void ShowOpenGLVersion()
     printf("OpenGL工具库版本：%s\n", strgluVersion);
 }
 
-GLfloat vts[]={
-    0.0f,20.0f,0.0f,1.0f,0.0f,
-    200.0f,200.0f,1.0f,0.0f,0.0f,
-    300.0f,20.0f,1.0f,1.0f,1.0f
-};
-
 void EngineInit()
 {
 	pEngine=CreateEngine();
+
+	pEventManager=pEngine->pEventManager;
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT,1);
 
@@ -68,7 +65,21 @@ void EngineInit()
 
 void Mouse(int button,int state,int x,int y)
 {
+    EventManager *pM=pEngine->pEventManager;
+    Event *pEvent=CreateClickEvent();
+    ClickEvent *pClickEvent=pEvent->pTag;
 
+    if(state==GLUT_DOWN)
+        pClickEvent->bDown=TRUE;
+    else
+        pClickEvent->bDown=FALSE;
+
+    pClickEvent->x=x;
+    pClickEvent->y=y;
+
+    pClickEvent->Button=button;
+
+    pM->AddEvent(pM,pEvent);
 }
 
 int main(int argc,char *argv[])
@@ -102,6 +113,7 @@ int main(int argc,char *argv[])
 
         pEngine->DoScenes(pEngine);
 
+        pEventManager->DestoryAllEvents(pEventManager);
         pEngine->WaitForFrameTime(pEngine);
 
         glutSwapBuffers();

@@ -18,6 +18,6 @@ void				vtDestory(Vector *pVt);
 void				vtAddBack(Vector *pVt,void *pNode);		//添加
 void 				*vtRemove(Vector *pVt,int index);		//删除
 void				*vtGet(Vector *pVt,int index);			//检索
-int				vtCount(Vector *pVt);						//元素数量
+int					vtCount(Vector *pVt);						//元素数量
 
 #endif // VECTOR_H_INCLUDED
