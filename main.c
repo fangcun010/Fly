@@ -75,7 +75,7 @@ void Mouse(int button,int state,int x,int y)
         pClickEvent->bDown=FALSE;
 
     pClickEvent->x=x;
-    pClickEvent->y=y;
+    pClickEvent->y=WND_H-y;
 
     pClickEvent->Button=button;
 

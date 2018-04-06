@@ -686,6 +686,37 @@ void DestoryEventManager(EventManager *pM)
 
 }
 
+Call *CreateCall(ObjFunc pFunc,void *pData)
+{
+    Call *pCall=malloc(sizeof(Call));
+
+    pCall->ID=MakeID();
+    pCall->pFunc=pFunc;
+    pCall->pData=pData;
+
+    return pCall;
+}
+
+void DestoryCall(Call *pCall)
+{
+    free(pCall);
+}
+
+CallManager *CreateCallManager(ObjFunc pFunc,void *pData)
+{
+    CallManager *pCallManager=malloc(sizeof(CallManager));
+
+    pCallManager->pCallVt=vtCreate();
+
+    return pCallManager;
+}
+
+void DestoryCallManager(CallManager *pM)
+{
+    vtDestory(pM->pCallVt);
+    free(pM);
+}
+
 unsigned long GetTickCount()
 {
     struct timeval t;
@@ -859,4 +890,11 @@ void ShowImage(Texture *pTexture,int x,int y,int w,int h)
     glEnableVertexAttribArray(1);
 
     glDrawArrays(GL_TRIANGLE_FAN,0,4);
+}
+
+BOOL IsInRect(int x,int y,int dx,int dy,int w,int h)
+{
+    if(x>=dx && x<=dx+w-1 && y>=dy && y<=dy+h-1)
+        return TRUE;
+    return FALSE;
 }

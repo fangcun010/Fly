@@ -45,6 +45,13 @@ typedef struct tagSpriteManager                      //精灵管理器
     ObjFunc DoEvents;                                     //事件
 } SpriteManager;
 
+typedef struct tagCall
+{
+    int ID;
+    ObjFunc pFunc;
+    void *pData;
+} Call;
+
 typedef struct tagCallManager                        //回调管理器
 {
     Vector *pCallVt;                                     //回调向量
@@ -268,6 +275,12 @@ Event *              EventManagerGetEvent(EventManager *pM,                //获
 void                 EventManagerDestoryAllEvents(EventManager *pM);      //移除所有事件
 unsigned int        EventManagerGetEventCount(EventManager *pM);          //获取事件个数
 
+Call *               CreateCall(ObjFunc pFunc,void *pData);                //创建回调
+void                 DestoryCall(Call *pCall);                               //销毁回调
+
+CallManager *       CreateCallManager();                                    //创建回调管理器
+void                 DestoryCallManager(CallManager *pM);                  //销毁回调管理器
+
 unsigned int        MakeID();                                                 //产生一个不重复的ID值
 unsigned long       GetTickCount();                                          //获取毫秒数
 BOOL                  LoadTexture(Texture *pTexture,const char *strFile); //载入纹理
@@ -276,7 +289,8 @@ BOOL                  LoadShader(Shader *pShader,const char *strFile,           
                                                     BOOL bFrag);
 BOOL                  LoadProgram(Program *pProgram,Shader *pVertexShader,       //载入着色程序
                                         Shader *pFragShader);
-void                  ShowImage(Texture *pTexture,            //显示图像
+void                  ShowImage(Texture *pTexture,                                  //显示图像
                                         int x,int y,int w,int h);
+BOOL                  IsInRect(int x,int y,int dx,int dy,int w,int h);            //是否在矩形范围
 
 #endif // SGENGINE_H_INCLUDED

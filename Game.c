@@ -72,6 +72,35 @@ void MainMenuSceneDoDraw(Scene *pScene)
 
 void MainMenuSceneDoEvents(Scene *pScene)
 {
-    if(pEventManager->GetEventCount(pEventManager))
-        printf("1\n");
+    Vector *pVt=pEventManager->pEventVt;
+
+    for(int i=0;i<vtCount(pVt);i++)
+    {
+        Event *pEvent=vtGet(pVt,i);
+
+        if(pEvent->nEventID==EVENT_CLICK)
+        {
+            ClickEvent *pClickEvent=pEvent->pTag;
+            int x=pClickEvent->x;
+            int y=pClickEvent->y;
+
+            if(pClickEvent->bDown)
+            {
+                if(IsInRect(x,y,130,350,140,30))//新的游戏
+                {
+                }
+                else if(IsInRect(x,y,130,300,140,30))//游戏设置
+                {
+                }
+                else if(IsInRect(x,y,130,250,140,30))//关于游戏
+                {
+
+                }
+                else if(IsInRect(x,y,130,200,140,30))//退出游戏
+                {
+
+                }
+            }
+        }
+    }
 }
