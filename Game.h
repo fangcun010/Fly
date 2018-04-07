@@ -7,6 +7,7 @@
 #define				WND_H						600
 
 extern Engine *pEngine;                                    //游戏引擎
+extern SceneManager *pSceneManager;                      //场景管理器
 extern EventManager *pEventManager;                      //事件管理器
 extern CallManager *pCallManager;                        //回调管理器
 

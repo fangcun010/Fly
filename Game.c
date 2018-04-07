@@ -92,6 +92,8 @@ static void ExitGame(void *pData)
 
 void MainMenuSceneDoEvents(Scene *pScene)
 {
+    if(!pScene->bDoEvents) return;
+
     Vector *pVt=pEventManager->pEventVt;
 
     for(int i=0;i<vtCount(pVt);i++)

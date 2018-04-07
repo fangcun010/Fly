@@ -7,6 +7,7 @@
 #include "Game.h"
 
 Engine *pEngine;
+SceneManager *pSceneManager;
 EventManager *pEventManager;
 CallManager *pCallManager;
 
@@ -26,6 +27,7 @@ void EngineInit()
 {
 	pEngine=CreateEngine();
 
+	pSceneManager=pEngine->pSceneManager;
 	pEventManager=pEngine->pEventManager;
 	pCallManager=pEngine->pCallManager;
 
