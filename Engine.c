@@ -17,6 +17,7 @@ Engine *CreateEngine()
     pEngine->pProgramManager=CreateProgramManager();
     pEngine->pSoundManager=CreateSoundManager();
     pEngine->pEventManager=CreateEventManager();
+    pEngine->pCallManager=CreateCallManager();
 
     pEngine->DoScenes=EngineDoScenes;
     pEngine->WaitForFrameTime=WaitForFrameTime;
@@ -683,7 +684,9 @@ unsigned int EventManagerGetEventCount(EventManager *pM)
 
 void DestoryEventManager(EventManager *pM)
 {
-
+    Vector *pVt=pM->pEventVt;
+    vtDestory(pVt);
+    free(pM);
 }
 
 Call *CreateCall(ObjFunc pFunc,void *pData)
@@ -709,6 +712,57 @@ CallManager *CreateCallManager(ObjFunc pFunc,void *pData)
     pCallManager->pCallVt=vtCreate();
 
     return pCallManager;
+}
+
+unsigned int CallManagerAddCall(CallManager *pM,Call *pCall)
+{
+    Vector *pVt=pM->pCallVt;
+
+    vtAddBack(pVt,pCall);
+
+    return pCall->ID;
+}
+
+Call *CallManagerGetCall(CallManager *pM,unsigned int ID)
+{
+    Vector *pVt=pM->pCallVt;
+
+    for(int i=0;i<vtCount(pVt);i++)
+    {
+        Call *pCall=vtGet(pVt,i);
+
+        if(pCall->ID==ID) return pCall;
+    }
+
+    return NULL;
+}
+
+Call *CallManagerRemoveCall(CallManager *pM,unsigned int ID)
+{
+    Vector *pVt=pM->pCallVt;
+
+    for(int i=0;i<vtCount(pVt);i++)
+    {
+        Call *pCall=vtGet(pVt,i);
+
+        if(pCall->ID==ID)
+        {
+            vtRemove(pVt,i);
+            return pCall;
+        }
+    }
+
+    return NULL;
+}
+
+void CallManagerDestoryAllCalls(CallManager *pM)
+{
+    Vector *pVt=pM->pCallVt;
+
+    for(int i=0;i<vtCount(pVt);i++)
+        free(vtGet(pVt,i));
+
+    pVt->nCount=0;
 }
 
 void DestoryCallManager(CallManager *pM)

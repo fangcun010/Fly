@@ -55,6 +55,9 @@ typedef struct tagCall
 typedef struct tagCallManager                        //回调管理器
 {
     Vector *pCallVt;                                     //回调向量
+
+    PointObjFuncUInt GetCall;                           //获取回调
+    UIntObjFuncParam AddCall;                           //添加函数回调
 } CallManager;
 
 typedef struct tagTexture
@@ -165,12 +168,13 @@ typedef struct tagEngine                                          //引擎
     unsigned int VAO;
     unsigned int VBO;
 
-    SceneManager *pSceneManager;                                 //场景管理器
-    TextureManager *pTextureManager;                            //纹理管理器
+    SceneManager *pSceneManager;                                  //场景管理器
+    TextureManager *pTextureManager;                              //纹理管理器
     ShaderManager *pShaderManager;                                //着色器管理器
-    ProgramManager *pProgramManager;                            //着色程序管理器
-    SoundManager *pSoundManager;                                 //声音管理器
-    EventManager *pEventManager;                                 //事件管理器
+    ProgramManager *pProgramManager;                            　//着色程序管理器
+    SoundManager *pSoundManager;                                　//声音管理器
+    EventManager *pEventManager;                                　//事件管理器
+    CallManager *pCallManager;                                    //回调管理器
 
     ObjFunc WaitForFrameTime;                                     //等待刷新时间
     ObjFunc DoScenes;                                              //执行场景操作
@@ -280,6 +284,13 @@ void                 DestoryCall(Call *pCall);                               //�
 
 CallManager *       CreateCallManager();                                    //创建回调管理器
 void                 DestoryCallManager(CallManager *pM);                  //销毁回调管理器
+unsigned int        CallManagerAddCall(CallManager *pM,                   //添加回调
+                                       Call *pCall);
+Call *               CallManagerRemoveCall(CallManager *pM,                //移除回调
+                                        unsigned int ID);
+Call *               CallManagerGetCall(CallManager *pM,                   //获取回调
+                                        unsigned int ID);
+void                 CallManagerDestoryAllCalls(CallManager *pM);         //销毁所有回调
 
 unsigned int        MakeID();                                                 //产生一个不重复的ID值
 unsigned long       GetTickCount();                                          //获取毫秒数
