@@ -70,6 +70,26 @@ void MainMenuSceneDoDraw(Scene *pScene)
               pExitGameTexture->Width,pExitGameTexture->Height);
 }
 
+static void NewGame(void *pData)
+{
+    puts("New Game");
+}
+
+static void SetGame(void *pData)
+{
+    puts("Set Game");
+}
+
+static void AboutGame(void *pData)
+{
+    puts("About Game");
+}
+
+static void ExitGame(void *pData)
+{
+    puts("Exit Game");
+}
+
 void MainMenuSceneDoEvents(Scene *pScene)
 {
     Vector *pVt=pEventManager->pEventVt;
@@ -88,17 +108,23 @@ void MainMenuSceneDoEvents(Scene *pScene)
             {
                 if(IsInRect(x,y,130,350,140,30))//新的游戏
                 {
+                    Call *pCall=CreateCall(NewGame,NULL);
+                    pCallManager->AddCall(pCallManager,pCall);
                 }
                 else if(IsInRect(x,y,130,300,140,30))//游戏设置
                 {
+                    Call *pCall=CreateCall(SetGame,NULL);
+                    pCallManager->AddCall(pCallManager,pCall);
                 }
                 else if(IsInRect(x,y,130,250,140,30))//关于游戏
                 {
-
+                    Call *pCall=CreateCall(AboutGame,NULL);
+                    pCallManager->AddCall(pCallManager,pCall);
                 }
                 else if(IsInRect(x,y,130,200,140,30))//退出游戏
                 {
-
+                    Call *pCall=CreateCall(ExitGame,NULL);
+                    pCallManager->AddCall(pCallManager,pCall);
                 }
             }
         }

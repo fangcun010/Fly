@@ -8,6 +8,7 @@
 
 extern Engine *pEngine;                                    //游戏引擎
 extern EventManager *pEventManager;                      //事件管理器
+extern CallManager *pCallManager;                        //回调管理器
 
 extern Scene *pMainMenuScene;                            //主菜单场景
 extern unsigned int BackgroundTexture;                  //背景纹理

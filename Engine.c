@@ -705,11 +705,17 @@ void DestoryCall(Call *pCall)
     free(pCall);
 }
 
-CallManager *CreateCallManager(ObjFunc pFunc,void *pData)
+CallManager *CreateCallManager()
 {
     CallManager *pCallManager=malloc(sizeof(CallManager));
 
     pCallManager->pCallVt=vtCreate();
+
+    pCallManager->AddCall=CallManagerAddCall;
+    pCallManager->GetCall=CallManagerGetCall;
+    pCallManager->RemoveCall=CallManagerRemoveCall;
+    pCallManager->DestoryAllCalls=CallManagerDestoryAllCalls;
+    pCallManager->DoCalls=CallManagerDoCalls;
 
     return pCallManager;
 }
@@ -747,7 +753,7 @@ Call *CallManagerRemoveCall(CallManager *pM,unsigned int ID)
 
         if(pCall->ID==ID)
         {
-            vtRemove(pVt,i);
+            DestoryCall(pCall);
             return pCall;
         }
     }
@@ -760,9 +766,21 @@ void CallManagerDestoryAllCalls(CallManager *pM)
     Vector *pVt=pM->pCallVt;
 
     for(int i=0;i<vtCount(pVt);i++)
-        free(vtGet(pVt,i));
+        DestoryCall(vtGet(pVt,i));
 
     pVt->nCount=0;
+}
+
+void CallManagerDoCalls(CallManager *pM)
+{
+    Vector *pVt=pM->pCallVt;
+
+    for(int i=0;i<vtCount(pVt);i++)
+    {
+        Call *pCall=vtGet(pVt,i);
+
+        pCall->pFunc(pCall->pData);
+    }
 }
 
 void DestoryCallManager(CallManager *pM)

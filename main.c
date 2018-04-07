@@ -8,6 +8,7 @@
 
 Engine *pEngine;
 EventManager *pEventManager;
+CallManager *pCallManager;
 
 void ShowOpenGLVersion()
 {
@@ -26,6 +27,7 @@ void EngineInit()
 	pEngine=CreateEngine();
 
 	pEventManager=pEngine->pEventManager;
+	pCallManager=pEngine->pCallManager;
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT,1);
 
@@ -114,6 +116,9 @@ int main(int argc,char *argv[])
         pEngine->DoScenes(pEngine);
 
         pEventManager->DestoryAllEvents(pEventManager);
+        pCallManager->DoCalls(pCallManager);
+        pCallManager->DestoryAllCalls(pCallManager);
+
         pEngine->WaitForFrameTime(pEngine);
 
         glutSwapBuffers();

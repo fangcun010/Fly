@@ -30,7 +30,7 @@ typedef struct tagSprite                                   //精灵
     ObjFunc DoInit;                                           //执行初始化
     ObjFunc DoCal;                                            //执行计算
     ObjFunc DoDraw;                                           //执行绘制
-    ObjFunc DoEvents;                                        //执行事件　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　//执行事件
+    ObjFunc DoEvents;                                         //执行事件　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　//执行事件
 } Sprite;
 
 typedef struct tagSpriteManager                      //精灵管理器
@@ -57,7 +57,10 @@ typedef struct tagCallManager                        //回调管理器
     Vector *pCallVt;                                     //回调向量
 
     PointObjFuncUInt GetCall;                           //获取回调
+    PointObjFuncUInt RemoveCall;                        //移除回调
     UIntObjFuncParam AddCall;                           //添加函数回调
+    ObjFunc DestoryAllCalls;                            //销毁所有回调
+    ObjFunc DoCalls;                                     //执行回调
 } CallManager;
 
 typedef struct tagTexture
@@ -171,9 +174,9 @@ typedef struct tagEngine                                          //引擎
     SceneManager *pSceneManager;                                  //场景管理器
     TextureManager *pTextureManager;                              //纹理管理器
     ShaderManager *pShaderManager;                                //着色器管理器
-    ProgramManager *pProgramManager;                            　//着色程序管理器
-    SoundManager *pSoundManager;                                　//声音管理器
-    EventManager *pEventManager;                                　//事件管理器
+    ProgramManager *pProgramManager;                              //着色程序管理器
+    SoundManager *pSoundManager;                                  //声音管理器
+    EventManager *pEventManager;                                  //事件管理器
     CallManager *pCallManager;                                    //回调管理器
 
     ObjFunc WaitForFrameTime;                                     //等待刷新时间
@@ -290,6 +293,7 @@ Call *               CallManagerRemoveCall(CallManager *pM,                //移
                                         unsigned int ID);
 Call *               CallManagerGetCall(CallManager *pM,                   //获取回调
                                         unsigned int ID);
+void                 CallManagerDoCalls(CallManager *pM);                  //执行回调
 void                 CallManagerDestoryAllCalls(CallManager *pM);         //销毁所有回调
 
 unsigned int        MakeID();                                                 //产生一个不重复的ID值
