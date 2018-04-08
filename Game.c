@@ -11,6 +11,10 @@ Texture *pSetGameTexture;
 Texture *pAboutGameTexture;
 Texture *pExitGameTexture;
 
+//设置游戏
+Scene *pSetScene;
+Texture *pSetBackgroundTexture;
+
 //关于场景
 Scene *pAboutScene;
 Texture *pAboutBackgroundTexture;
@@ -101,6 +105,21 @@ static void AboutGame(void *pData)
     pMainMenuScene->bDoEvents=FALSE;
 
     pSceneManager->AddScene(pSceneManager,pAboutScene);
+}
+
+void SetGameSceneDoCal(Scene *pScene)
+{
+
+}
+
+void SetGameSceneDoDraw(Scene *pScene)
+{
+
+}
+
+void SetGameSceneDoEvents(Scene *pScene)
+{
+
 }
 
 void AboutGameSceneDoCal(Scene *pScene)
