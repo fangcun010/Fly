@@ -277,6 +277,9 @@ Scene *CreateScene()
 
     pScene->ID=MakeID();
 
+    pScene->bDoEvents=TRUE;
+
+    pScene->DoInit=SceneDoInit;
     pScene->DoCal=SceneDoCal;
     pScene->DoDraw=SceneDoDraw;
     pScene->DoEvents=SceneDoEvents;

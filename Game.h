@@ -21,4 +21,8 @@ void MainMenuSceneDoCal(Scene *pScene);                //主菜单场景计算
 void MainMenuSceneDoDraw(Scene *pScene);               //主菜单场景绘制
 void MainMenuSceneDoEvents(Scene *pScene);            //主菜单场景执行事件
 
+void AboutGameSceneDoCal(Scene *pScene);               //关于游戏计算
+void AboutGameSceneDoDraw(Scene *pScene);              //关于游戏绘制
+void AboutGameSceneDoEvents(Scene *pScene);            //关于游戏执行事件
+
 #endif // GAME_H_INCLUDED

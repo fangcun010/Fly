@@ -13,11 +13,13 @@ Texture *pExitGameTexture;
 
 //关于场景
 Scene *pAboutScene;
+Texture *pAboutBackgroundTexture;
 
 void InitGame()
 {
     TextureManager *pTextureManager=pEngine->pTextureManager;
 
+    //主菜单场景
     pMainMenuScene=CreateScene();
 
     pMainMenuScene->DoCal=MainMenuSceneDoCal;
@@ -44,6 +46,19 @@ void InitGame()
     pTextureManager->AddTexture(pTextureManager,pSetGameTexture);
     pTextureManager->AddTexture(pTextureManager,pAboutGameTexture);
     pTextureManager->AddTexture(pTextureManager,pExitGameTexture);
+
+    //关于游戏场景
+
+    pAboutScene=CreateScene();
+
+    pAboutScene->DoCal=AboutGameSceneDoCal;
+    pAboutScene->DoDraw=AboutGameSceneDoDraw;
+    pAboutScene->DoEvents=AboutGameSceneDoEvents;
+
+    pAboutBackgroundTexture=CreateTexture();
+    LoadTexture(pAboutBackgroundTexture,"res/AboutGameScene.RGBA");
+
+    pTextureManager->AddTexture(pTextureManager,pAboutBackgroundTexture);
 }
 
 void MainMenuSceneDoCal(Scene *pScene)
@@ -83,6 +98,47 @@ static void SetGame(void *pData)
 static void AboutGame(void *pData)
 {
     puts("About Game");
+    pMainMenuScene->bDoEvents=FALSE;
+
+    pSceneManager->AddScene(pSceneManager,pAboutScene);
+}
+
+void AboutGameSceneDoCal(Scene *pScene)
+{
+
+}
+
+void AboutGameSceneDoDraw(Scene *pScene)
+{
+    ShowImage(pAboutBackgroundTexture,100,250,
+                pAboutBackgroundTexture->Width,pAboutBackgroundTexture->Height);
+}
+
+static void RemoveAboutScene(void *pData)
+{
+    Scene *pScene=pSceneManager->RemoveScene(pSceneManager,pAboutScene->ID);
+    pMainMenuScene->bDoEvents=TRUE;
+}
+
+void AboutGameSceneDoEvents(Scene *pScene)
+{
+    Vector *pVt=pEventManager->pEventVt;
+
+    for(int i=0;i<vtCount(pVt);i++)
+    {
+        Event *pEvent=vtGet(pVt,i);
+
+        if(pEvent->nEventID==EVENT_CLICK)
+        {
+            ClickEvent *pClickEvent=pEvent->pTag;
+
+            if(pClickEvent->bDown)
+            {
+                Call *pCall=CreateCall(RemoveAboutScene,NULL);
+                pCallManager->AddCall(pCallManager,pCall);
+            }
+        }
+    }
 }
 
 static void ExitGame(void *pData)
