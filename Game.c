@@ -82,6 +82,7 @@ void InitGame()
     //游戏场景
     pGameScene=CreateScene();
 
+    pGameScene->DoInit=GameSceneDoInit;
     pGameScene->DoCal=GameSceneDoCal;
     pGameScene->DoDraw=GameSceneDoDraw;
     pGameScene->DoEvents=GameSceneDoEvents;
