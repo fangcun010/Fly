@@ -19,6 +19,9 @@ Texture *pSetBackgroundTexture;
 Scene *pAboutScene;
 Texture *pAboutBackgroundTexture;
 
+//游戏场景
+Scene *pGameScene;
+
 void InitGame()
 {
     TextureManager *pTextureManager=pEngine->pTextureManager;
@@ -51,6 +54,18 @@ void InitGame()
     pTextureManager->AddTexture(pTextureManager,pAboutGameTexture);
     pTextureManager->AddTexture(pTextureManager,pExitGameTexture);
 
+    //设置游戏场景
+    pSetScene=CreateScene();
+
+    pSetScene->DoCal=SetGameSceneDoCal;
+    pSetScene->DoDraw=SetGameSceneDoDraw;
+    pSetScene->DoEvents=SetGameSceneDoEvents;
+
+    pSetBackgroundTexture=CreateTexture();
+    LoadTexture(pSetBackgroundTexture,"res/SetGameScene.RGBA");
+
+    pTextureManager->AddTexture(pTextureManager,pSetBackgroundTexture);
+
     //关于游戏场景
 
     pAboutScene=CreateScene();
@@ -63,6 +78,13 @@ void InitGame()
     LoadTexture(pAboutBackgroundTexture,"res/AboutGameScene.RGBA");
 
     pTextureManager->AddTexture(pTextureManager,pAboutBackgroundTexture);
+
+    //游戏场景
+    pGameScene=CreateScene();
+
+    pGameScene->DoCal=GameSceneDoCal;
+    pGameScene->DoDraw=GameSceneDoDraw;
+    pGameScene->DoEvents=GameSceneDoEvents;
 }
 
 void MainMenuSceneDoCal(Scene *pScene)
@@ -105,6 +127,13 @@ static void AboutGame(void *pData)
     pMainMenuScene->bDoEvents=FALSE;
 
     pSceneManager->AddScene(pSceneManager,pAboutScene);
+}
+
+static void ExitGame(void *pData)
+{
+    puts("Exit Game");
+
+    pEngine->bLeaveLoop=TRUE;
 }
 
 void SetGameSceneDoCal(Scene *pScene)
@@ -160,11 +189,6 @@ void AboutGameSceneDoEvents(Scene *pScene)
     }
 }
 
-static void ExitGame(void *pData)
-{
-    puts("Exit Game");
-}
-
 void MainMenuSceneDoEvents(Scene *pScene)
 {
     if(!pScene->bDoEvents) return;
@@ -206,4 +230,23 @@ void MainMenuSceneDoEvents(Scene *pScene)
             }
         }
     }
+}
+
+void GameSceneDoInit(Scene *pScene)
+{
+
+}
+
+void GameSceneDoCal(Scene *pScene)
+{
+}
+
+void GameSceneDoDraw(Scene *pScene)
+{
+
+}
+
+void GameSceneDoEvents(Scene *pScene)
+{
+
 }
