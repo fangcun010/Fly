@@ -190,6 +190,8 @@ SpriteManager *CreateSpriteManager()
 
     pM->pSpriteVt=vtCreate();
 
+    pM->AddSprite=SpriteManagerAddSprite;
+    pM->GetSprite=SpriteManagerGetSprite;
     pM->RemoveSprite=SpriteManagerRemoveSprite;
 
     pM->DoInit=SpriteManagerDoInit;
@@ -210,6 +212,22 @@ Sprite *SpriteManagerRemoveSprite(SpriteManager *pM,
         Sprite *pSprite=vtGet(pVt,i);
 
         if(pSprite->ID==ID) return pSprite;
+    }
+
+    return NULL;
+}
+
+Sprite *SpriteManagerGetSprite(SpriteManager *pM,
+                            unsigned int ID)
+{
+    Vector *pVt=pM->pSpriteVt;
+
+    for(int i=0;i<vtCount(pVt);i++)
+    {
+        Sprite *pSprite=vtGet(pVt,i);
+
+        if(pSprite->ID==ID)
+            return pSprite;
     }
 
     return NULL;
@@ -277,6 +295,8 @@ Scene *CreateScene()
 
     pScene->ID=MakeID();
 
+    pScene->AddSprite=SceneAddSprite;
+
     pScene->bDoEvents=TRUE;
 
     pScene->DoInit=SceneDoInit;
@@ -287,6 +307,29 @@ Scene *CreateScene()
     pScene->pSpriteManager=CreateSpriteManager();
 
     return pScene;
+}
+
+unsigned int SceneAddSprite(Scene *pScene,Sprite *pSprite)
+{
+    SpriteManager *pM=pScene->pSpriteManager;
+
+    pM->AddSprite(pM,pSprite);
+
+    return pSprite->ID;
+}
+
+Sprite *SceneGetSprite(Scene *pScene,unsigned int ID)
+{
+    SpriteManager *pM=pScene->pSpriteManager;
+
+    return pM->GetSprite(pM,ID);
+}
+
+Sprite *SceneRemoveSprite(Scene *pScene,unsigned int ID)
+{
+    SpriteManager *pM=pScene->pSpriteManager;
+
+    return pM->RemoveSprite(pM,ID);
 }
 
 void SceneDoInit(Scene *pScene)

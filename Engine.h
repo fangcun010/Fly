@@ -33,11 +33,13 @@ typedef struct tagSprite                                   //精灵
     ObjFunc DoEvents;                                         //执行事件　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　//执行事件
 } Sprite;
 
-typedef struct tagSpriteManager                      //精灵管理器
+typedef struct tagSpriteManager                        //精灵管理器
 {
     Vector *pSpriteVt;                                   //精灵向量
 
-    PointObjFuncUInt RemoveSprite;
+    UIntObjFuncParam AddSprite;                         //添加精灵
+    PointObjFuncUInt GetSprite;                         //获取精灵
+    PointObjFuncUInt RemoveSprite;                      //移除精灵
 
     ObjFunc DoInit;
     ObjFunc DoCal;                                        //计算
@@ -93,6 +95,10 @@ typedef struct tagScene                                    //场景
 
     SpriteManager *pSpriteManager;                         //精灵向量
 
+    UIntObjFuncParam AddSprite;                            //添加精灵
+    PointObjFuncUInt GetSprite;                            //获取精灵
+    PointObjFuncUInt RemoveSprite;                         //移除精灵
+
     ObjFunc DoInit;                                          //场景初始化
     ObjFunc DoCal;                                           //执行计算
     ObjFunc DoDraw;                                          //执行绘制
@@ -141,11 +147,11 @@ typedef struct tagEventManager                                    //事件管理
 typedef struct tagShader                                           //着色器
 {
     unsigned int ID;
-    GLuint ShaderID;                                                        //着色器ID
+    GLuint ShaderID;                                                 //着色器ID
     BOOL bFrag;                                                       //是否是片段着色器
 } Shader;
 
-typedef struct tagShderManager                                  //着色器管理器
+typedef struct tagShaderManager                                    //着色器管理器
 {
     Vector *pShaderVt;                                              //着色器向量
     UIntObjFuncParam AddShader;                                    //添加着色器
@@ -202,8 +208,14 @@ void                  SceneManagerDoCal(SceneManager *pM);             //计算
 void                  SceneManagerDoDraw(SceneManager *pM);            //绘制
 void                  SceneManagerDoEvents(SceneManager *pM);          //执行事件
 
-Scene *               CreateScene();                                         //创建场景
+Scene *               CreateScene();                                       //创建场景
 void                  DestoryScene(Scene *pScene);                        //销毁场景
+unsigned int         SceneAddSprite(Scene *pScene,                      //添加精灵
+                                        Sprite *pSprite);
+Sprite *              SceneGetSprite(Scene *pScene,                     //获取精灵
+                                        unsigned int ID);
+Sprite *              SceneRemoveSprite(Scene *pScene,                   //移除精灵
+                                            unsigned int ID);
 void                  SceneDoInit(Scene *pScene);                           //场景初始化
 void                  SceneDoCal(Scene *pScene);                           //场景计算
 void                  SceneDoDraw(Scene *pScene);                          //场景绘制
@@ -220,6 +232,8 @@ SpriteManager *     CreateSpriteManager();                                //创�
 void                   DestorySpriteManager(SpriteManager *pM);          //销毁精灵管理器
 unsigned int          SpriteManagerAddSprite(SpriteManager *pM,
                                         Sprite *pSprite);
+Sprite *               SpriteManagerGetSprite(SpriteManager *pM,        //获取精灵
+                                        unsigned int ID);
 Sprite *               SpriteManagerRemoveSprite(SpriteManager *pM,     //移除精灵
                                            unsigned int ID);
 void                   SpriteManagerDoInit(SpriteManager *pM);

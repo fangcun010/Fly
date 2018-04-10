@@ -16,11 +16,14 @@ Scene *pSetScene;
 Texture *pSetBackgroundTexture;
 
 //关于场景
-Scene *pAboutScene;
+Scene *pAboutScene=NULL;
 Texture *pAboutBackgroundTexture;
 
 //游戏场景
 Scene *pGameScene;
+Texture *pCurPlayerTexture;
+Texture *pPlayerTexture[2];
+Sprite *pPlayer;
 
 void InitGame()
 {
@@ -86,6 +89,19 @@ void InitGame()
     pGameScene->DoCal=GameSceneDoCal;
     pGameScene->DoDraw=GameSceneDoDraw;
     pGameScene->DoEvents=GameSceneDoEvents;
+
+    pPlayerTexture[0]=CreateTexture();
+    pPlayerTexture[1]=CreateTexture();
+
+    LoadTexture(pPlayerTexture[0],"res/Player1.RGBA");
+    LoadTexture(pPlayerTexture[1],"res/Player2.RGBA");
+
+    pTextureManager->AddTexture(pTextureManager,pPlayerTexture[0]);
+    pTextureManager->AddTexture(pTextureManager,pPlayerTexture[1]);
+
+    pPlayer=CreateSprite();
+
+
 }
 
 void MainMenuSceneDoCal(Scene *pScene)
@@ -235,7 +251,6 @@ void MainMenuSceneDoEvents(Scene *pScene)
 
 void GameSceneDoInit(Scene *pScene)
 {
-
 }
 
 void GameSceneDoCal(Scene *pScene)
@@ -244,7 +259,10 @@ void GameSceneDoCal(Scene *pScene)
 
 void GameSceneDoDraw(Scene *pScene)
 {
+    if(pCurPlayerTexture)
+    {
 
+    }
 }
 
 void GameSceneDoEvents(Scene *pScene)
