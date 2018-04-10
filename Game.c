@@ -143,7 +143,7 @@ void SetGameSceneDoCal(Scene *pScene)
 
 void SetGameSceneDoDraw(Scene *pScene)
 {
-
+    ShowImage(pBackgroundTexture,0,0,WND_W,WND_H);
 }
 
 void SetGameSceneDoEvents(Scene *pScene)

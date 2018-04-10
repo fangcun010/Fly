@@ -29,4 +29,9 @@ void AboutGameSceneDoCal(Scene *pScene);               //关于游戏计算
 void AboutGameSceneDoDraw(Scene *pScene);              //关于游戏绘制
 void AboutGameSceneDoEvents(Scene *pScene);            //关于游戏执行事件
 
+void GameSceneDoInit(Scene *pScene);                    //游戏场景初始化
+void GameSceneDoCal(Scene *pScene);                     //游戏场景计算
+void GameSceneDoDraw(Scene *pScene);                    //游戏场景绘制
+void GameSceneDoEvents(Scene *pScene);                  //游戏场景执行事件
+
 #endif // GAME_H_INCLUDED
