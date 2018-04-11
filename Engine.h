@@ -31,6 +31,8 @@ typedef struct tagSprite                                   //精灵
     ObjFunc DoCal;                                            //执行计算
     ObjFunc DoDraw;                                           //执行绘制
     ObjFunc DoEvents;                                         //执行事件　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　//执行事件
+
+    void *pTag;                                                //附加信息
 } Sprite;
 
 typedef struct tagSpriteManager                        //精灵管理器
@@ -72,7 +74,7 @@ typedef struct tagTexture
     unsigned int TexID;                                 //纹理ID
 } Texture;
 
-typedef struct tagTextureManager                     //纹理管理器
+typedef struct tagTextureManager                      //纹理管理器
 {
     Vector *pTextureVt;                                  //纹理向量
 

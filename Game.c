@@ -101,7 +101,12 @@ void InitGame()
 
     pPlayer=CreateSprite();
 
+    pPlayer->DoInit=PlayerDoInit;
+    pPlayer->DoCal=PlayerDoCal;
+    pPlayer->DoDraw=PlayerDoDraw;
+    pPlayer->DoEvents=PlayerDoEvents;
 
+    pGameScene->AddSprite(pGameScene,pPlayer);
 }
 
 void MainMenuSceneDoCal(Scene *pScene)
@@ -131,6 +136,8 @@ void MainMenuSceneDoDraw(Scene *pScene)
 static void NewGame(void *pData)
 {
     puts("New Game");
+    pSceneManager->RemoveScene(pSceneManager,pMainMenuScene->ID);
+    pSceneManager->AddScene(pSceneManager,pGameScene);
 }
 
 static void SetGame(void *pData)
@@ -259,13 +266,46 @@ void GameSceneDoCal(Scene *pScene)
 
 void GameSceneDoDraw(Scene *pScene)
 {
-    if(pCurPlayerTexture)
-    {
+    SpriteManager *pM=pScene->pSpriteManager;
 
-    }
+    ShowImage(pBackgroundTexture,0,0,WND_W,WND_H);
+
+    pM->DoDraw(pM);
 }
 
 void GameSceneDoEvents(Scene *pScene)
+{
+
+}
+
+void PlayerDoInit(Sprite *pSprite)
+{
+
+}
+
+void PlayerDoCal(Sprite *pSprite)
+{
+
+}
+
+void PlayerDoDraw(Sprite *pSprite)
+{
+    static unsigned long last=0;
+    static int id=0;
+
+    if(GetTickCount()-last>500)
+    {
+
+        id++;
+        id%=2;
+
+        last=GetTickCount();
+    }
+        ShowImage(pPlayerTexture[id],0,0,PLAYER_W,PLAYER_H);
+
+}
+
+void PlayerDoEvents(Sprite *pSprite)
 {
 
 }

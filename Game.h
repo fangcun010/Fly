@@ -6,6 +6,11 @@
 #define 				WND_W						400
 #define				WND_H						600
 
+#define              PLAYER_W                 60
+#define              PLAYER_H                 80
+
+
+
 extern Engine *pEngine;                                    //游戏引擎
 extern SceneManager *pSceneManager;                      //场景管理器
 extern EventManager *pEventManager;                      //事件管理器
@@ -33,5 +38,10 @@ void GameSceneDoInit(Scene *pScene);                    //游戏场景初始化
 void GameSceneDoCal(Scene *pScene);                     //游戏场景计算
 void GameSceneDoDraw(Scene *pScene);                    //游戏场景绘制
 void GameSceneDoEvents(Scene *pScene);                  //游戏场景执行事件
+
+void PlayerDoInit(Sprite *pSprite);                     //执行玩家初始化
+void PlayerDoCal(Sprite *pSprite);                      //执行玩家计算
+void PlayerDoDraw(Sprite *pSprite);                     //执行玩家绘制
+void PlayerDoEvents(Sprite *pSprite);                   //执行玩家事件
 
 #endif // GAME_H_INCLUDED
