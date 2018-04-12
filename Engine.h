@@ -9,6 +9,12 @@
 
 #define           EVENT_UNDEFINED           5000
 #define           EVENT_CLICK               5001
+#define           EVENT_KEY                 5002
+
+#define           KEY_LEFT                  10
+#define           KEY_RIGHT                 11
+#define           KEY_UP                    12
+#define           KEY_DOWN                  13
 
 typedef int BOOL;
 
@@ -132,6 +138,12 @@ typedef struct tagClickEvent                                       //点击事�
     int x,y;
     BOOL bDown;
 } ClickEvent;
+
+typedef struct tagKeyEvent
+{
+    int key;
+    BOOL bDown;
+} KeyEvent;
 
 typedef struct tagEventManager                                    //事件管理器
 {
@@ -286,6 +298,7 @@ Event *              CreateEvent();                                           //
 void                  DestoryEvent(Event *pEvent);                          //销毁事件
 
 Event *              CreateClickEvent();                                     //创建点击事件
+Event *              CreateKeyEvent();                                       //创建按键事件
 
 EventManager *      CreateEventManager();                                   //创建事件管理器
 void                 DestoryEventManager();                                  //销毁事件管理器

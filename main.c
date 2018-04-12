@@ -86,6 +86,30 @@ void Mouse(int button,int state,int x,int y)
     pM->AddEvent(pM,pEvent);
 }
 
+void Keyboard(unsigned int key,int x,int y)
+{
+    EventManager *pM=pEngine->pEventManager;
+    Event *pEvent=CreateKeyEvent();
+    KeyEvent *pKeyEvent=pEvent->pTag;
+
+    pKeyEvent->key=key;
+    pKeyEvent->bDown=TRUE;
+
+    pM->AddEvent(pM,pEvent);
+}
+
+void KeyboardUp(unsigned int key,int x,int y)
+{
+    EventManager *pM=pEngine->pEventManager;
+    Event *pEvent=CreateKeyEvent();
+    KeyEvent *pKeyEvent=pEvent->pTag;
+
+    pKeyEvent->key=key;
+    pKeyEvent->bDown=FALSE;
+
+    pM->AddEvent(pM,pEvent);
+}
+
 int main(int argc,char *argv[])
 {
 	glutInit(&argc,argv);
@@ -96,6 +120,8 @@ int main(int argc,char *argv[])
 	glutCreateWindow("Fly");
 
 	glutMouseFunc(Mouse);
+	glutKeyboardFunc(Keyboard);
+	glutKeyboardUpFunc(KeyboardUp);
 
 	GLenum err=glewInit();
 

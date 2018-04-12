@@ -651,6 +651,17 @@ Event *CreateClickEvent()
     return pEvent;
 }
 
+Event *CreateKeyEvent()
+{
+    Event *pEvent=CreateEvent();
+    KeyEvent *pKeyEvent=malloc(sizeof(KeyEvent));
+
+    pEvent->nEventID=EVENT_KEY;
+    pEvent->pTag=pKeyEvent;
+
+    return pEvent;
+}
+
 EventManager *CreateEventManager()
 {
     EventManager *pM=malloc(sizeof(EventManager));

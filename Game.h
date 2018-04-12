@@ -9,7 +9,16 @@
 #define              PLAYER_W                 60
 #define              PLAYER_H                 80
 
+#define              KEY_LEFT                 'j'
+#define              KEY_RIGHT                'l'
+#define              KEY_UP                   'i'
+#define              KEY_DOWN                 'k'
 
+typedef struct tagPlayer                                  //玩家信息
+{
+    int x,y;                                                //坐标
+    int State;                                              //状态
+} PlayerTag;
 
 extern Engine *pEngine;                                    //游戏引擎
 extern SceneManager *pSceneManager;                      //场景管理器
@@ -18,6 +27,8 @@ extern CallManager *pCallManager;                        //回调管理器
 
 extern Scene *pMainMenuScene;                            //主菜单场景
 extern unsigned int BackgroundTexture;                  //背景纹理
+
+extern int KeyState[256];                                 //按键状态
 
 void InitEnv();                                              //初始化环境
 void InitGame();                                             //初始化游戏
@@ -43,5 +54,8 @@ void PlayerDoInit(Sprite *pSprite);                     //执行玩家初始化
 void PlayerDoCal(Sprite *pSprite);                      //执行玩家计算
 void PlayerDoDraw(Sprite *pSprite);                     //执行玩家绘制
 void PlayerDoEvents(Sprite *pSprite);                   //执行玩家事件
+
+PlayerTag *CreatePlayerTag();                            //创建玩家信息
+void ResetKeyState();                                     //重置按键状态
 
 #endif // GAME_H_INCLUDED

@@ -24,6 +24,9 @@ Scene *pGameScene;
 Texture *pCurPlayerTexture;
 Texture *pPlayerTexture[2];
 Sprite *pPlayer;
+PlayerTag *pPlayerTag;
+
+int KeyState[256];
 
 void InitGame()
 {
@@ -105,6 +108,8 @@ void InitGame()
     pPlayer->DoCal=PlayerDoCal;
     pPlayer->DoDraw=PlayerDoDraw;
     pPlayer->DoEvents=PlayerDoEvents;
+
+    pPlayerTag=CreatePlayerTag();
 
     pGameScene->AddSprite(pGameScene,pPlayer);
 }
@@ -262,6 +267,9 @@ void GameSceneDoInit(Scene *pScene)
 
 void GameSceneDoCal(Scene *pScene)
 {
+    SpriteManager *pM=pScene->pSpriteManager;
+
+    pM->DoCal(pM);
 }
 
 void GameSceneDoDraw(Scene *pScene)
@@ -275,7 +283,9 @@ void GameSceneDoDraw(Scene *pScene)
 
 void GameSceneDoEvents(Scene *pScene)
 {
+    SpriteManager *pM=pScene->pSpriteManager;
 
+    pM->DoEvents(pM);
 }
 
 void PlayerDoInit(Sprite *pSprite)
@@ -285,27 +295,79 @@ void PlayerDoInit(Sprite *pSprite)
 
 void PlayerDoCal(Sprite *pSprite)
 {
-
+    if(KeyState[KEY_LEFT])
+    {
+        pPlayerTag->x-=5;
+    }
+    if(KeyState[KEY_RIGHT])
+    {
+        pPlayerTag->x+=5;
+    }
+    if(KeyState[KEY_UP])
+    {
+        pPlayerTag->y+=5;
+    }
+    if(KeyState[KEY_DOWN])
+    {
+        pPlayerTag->y-=5;
+    }
 }
 
 void PlayerDoDraw(Sprite *pSprite)
 {
-    static unsigned long last=0;
-    static int id=0;
+    static unsigned long lasttime;
 
-    if(GetTickCount()-last>500)
+    if(pPlayerTag->State==0)
     {
+        static int index=0;
 
-        id++;
-        id%=2;
-
-        last=GetTickCount();
+        if(GetTickCount()-lasttime>100)
+        {
+            index++;
+            index%=2;
+            lasttime=GetTickCount();
+        }
+        ShowImage(pPlayerTexture[index],pPlayerTag->x,pPlayerTag->y
+                ,PLAYER_W,PLAYER_H);
     }
-        ShowImage(pPlayerTexture[id],0,0,PLAYER_W,PLAYER_H);
-
 }
 
 void PlayerDoEvents(Sprite *pSprite)
 {
+    Vector *pVt=pEventManager->pEventVt;
 
+    for(int i=0;i<vtCount(pVt);i++)
+    {
+        Event *pEvent=vtGet(pVt,i);
+
+        if(pEvent->nEventID==EVENT_KEY)
+        {
+            KeyEvent *pKeyEvent=pEvent->pTag;
+
+            if(pKeyEvent->bDown)
+            {
+                KeyState[pKeyEvent->key]=TRUE;
+            }
+            else
+            {
+                KeyState[pKeyEvent->key]=FALSE;
+            }
+        }
+    }
+}
+
+PlayerTag *CreatePlayerTag()
+{
+    PlayerTag *pPlayerTag=malloc(sizeof(PlayerTag));
+
+    pPlayerTag->State=0;
+    pPlayerTag->x=0;
+    pPlayerTag->y=0;
+
+    return pPlayerTag;
+}
+
+void ResetKeyState()
+{
+    memset(KeyState,0,sizeof(KeyState));
 }
