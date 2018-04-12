@@ -110,6 +110,8 @@ void InitGame()
     pPlayer->DoEvents=PlayerDoEvents;
 
     pPlayerTag=CreatePlayerTag();
+    pPlayerTag->x=(WND_W-PLAYER_W)/2;
+    pPlayerTag->y=50;
 
     pGameScene->AddSprite(pGameScene,pPlayer);
 }
@@ -311,6 +313,11 @@ void PlayerDoCal(Sprite *pSprite)
     {
         pPlayerTag->y-=5;
     }
+
+    if(pPlayerTag->x<0) pPlayerTag->x=0;
+    if(pPlayerTag->x+PLAYER_W>WND_W) pPlayerTag->x=WND_W-PLAYER_W;
+    if(pPlayerTag->y<0) pPlayerTag->y=0;
+    if(pPlayerTag->y+PLAYER_H>WND_H) pPlayerTag->y=WND_H-PLAYER_H;
 }
 
 void PlayerDoDraw(Sprite *pSprite)
@@ -365,6 +372,47 @@ PlayerTag *CreatePlayerTag()
     pPlayerTag->y=0;
 
     return pPlayerTag;
+}
+
+Sprite *CreateBullet(int x,int y,int vx,int vy)
+{
+    Sprite *pSprite=CreateSprite();
+    BulletTag *pBulletTag=malloc(sizeof(BulletTag));
+
+    pBulletTag->x=x;pBulletTag->y=y;
+    pBulletTag->vx=vx;pBulletTag->vy=vy;
+
+    pSprite->pTag=pBulletTag;
+
+    pSprite->DoInit=BulletDoInit;
+    pSprite->DoCal=BulletDoCal;
+    pSprite->DoDraw=BulletDoDraw;
+    pSprite->DoEvents=BulletDoEvents;
+
+    return pSprite;
+}
+
+void BulletDoInit(Sprite *pSprite)
+{
+
+}
+
+void BulletDoCal(Sprite *pSprite)
+{
+    BulletTag *pTag=pSprite->pTag;
+
+    pTag->x+=pTag->vx;
+    pTag->y+=pTag->vy;
+}
+
+void BulletDoDraw(Sprite *pSprite)
+{
+
+}
+
+void BulletDoEvents(Sprite *pSprite)
+{
+
 }
 
 void ResetKeyState()

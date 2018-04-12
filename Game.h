@@ -20,6 +20,12 @@ typedef struct tagPlayer                                  //玩家信息
     int State;                                              //状态
 } PlayerTag;
 
+typedef struct tagBullet                                  //子弹信息
+{
+    int x,y;                                                //坐标
+    int vx,vy;                                              //速度
+} BulletTag;
+
 extern Engine *pEngine;                                    //游戏引擎
 extern SceneManager *pSceneManager;                      //场景管理器
 extern EventManager *pEventManager;                      //事件管理器
@@ -56,6 +62,13 @@ void PlayerDoDraw(Sprite *pSprite);                     //执行玩家绘制
 void PlayerDoEvents(Sprite *pSprite);                   //执行玩家事件
 
 PlayerTag *CreatePlayerTag();                            //创建玩家信息
+Sprite *CreateBullet();                                   //创建子弹
+
+void BulletDoInit(Sprite *pSprite);                     //子弹初始化
+void BulletDoCal(Sprite *pSprite);                       //子弹计算
+void BulletDoDraw(Sprite *pSprite);                     //子弹绘制
+void BulletDoEvents(Sprite *pSprite);                   //子弹处理事件
+
 void ResetKeyState();                                     //重置按键状态
 
 #endif // GAME_H_INCLUDED
