@@ -296,6 +296,7 @@ Scene *CreateScene()
     pScene->ID=MakeID();
 
     pScene->AddSprite=SceneAddSprite;
+    pScene->RemoveSprite=SceneRemoveSprite;
 
     pScene->bDoEvents=TRUE;
 

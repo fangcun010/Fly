@@ -119,10 +119,6 @@ void InitGame()
     LoadTexture(pBulletTexture,"res/Bullet.RGBA");
 
     pGameScene->AddSprite(pGameScene,pPlayer);
-
-    Sprite *pBullet=CreateBullet(100,100,1,1);
-
-    pGameScene->AddSprite(pGameScene,pBullet);
 }
 
 void MainMenuSceneDoCal(Scene *pScene)
@@ -304,6 +300,14 @@ void PlayerDoInit(Sprite *pSprite)
 
 }
 
+static void PlayerUseBullet(void *pData)
+{
+    Sprite *pBullet=CreateBullet(pPlayerTag->x+4,pPlayerTag->y+35,0,10);
+    pGameScene->AddSprite(pGameScene,pBullet);
+    pBullet=CreateBullet(pPlayerTag->x+44,pPlayerTag->y+35,0,10);
+    pGameScene->AddSprite(pGameScene,pBullet);
+}
+
 void PlayerDoCal(Sprite *pSprite)
 {
     if(KeyState[KEY_LEFT])
@@ -327,6 +331,18 @@ void PlayerDoCal(Sprite *pSprite)
     if(pPlayerTag->x+PLAYER_W>WND_W) pPlayerTag->x=WND_W-PLAYER_W;
     if(pPlayerTag->y<0) pPlayerTag->y=0;
     if(pPlayerTag->y+PLAYER_H>WND_H) pPlayerTag->y=WND_H-PLAYER_H;
+
+    if(KeyState['a'])
+    {
+        static unsigned long lasttime;
+
+        if(GetTickCount()-lasttime>100)
+        {
+            Call *pCall=CreateCall(PlayerUseBullet,NULL);
+            pCallManager->AddCall(pCallManager,pCall);
+            lasttime=GetTickCount();
+        }
+    }
 }
 
 void PlayerDoDraw(Sprite *pSprite)
@@ -406,12 +422,27 @@ void BulletDoInit(Sprite *pSprite)
 
 }
 
+static void RemoveBullet(void *pData)
+{
+    Sprite *pSprite=pData;
+
+    pGameScene->RemoveSprite(pGameScene,pSprite->ID);
+}
+
 void BulletDoCal(Sprite *pSprite)
 {
     BulletTag *pTag=pSprite->pTag;
 
     pTag->x+=pTag->vx;
     pTag->y+=pTag->vy;
+
+    if(pTag->y<-50 || pTag->y>WND_H+50 || pTag->x<-50 || pTag->x>WND_W+50)
+    {
+        Call *pCall=CreateCall(RemoveBullet,pSprite);
+
+        pCallManager->AddCall(pCallManager,pCall);
+    }
+
 }
 
 void BulletDoDraw(Sprite *pSprite)

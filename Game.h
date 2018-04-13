@@ -24,6 +24,7 @@ typedef struct tagBullet                                  //子弹信息
 {
     int x,y;                                                //坐标
     int vx,vy;                                              //速度
+    BOOL bEnemy;                                            //是否是敌人的子弹
 } BulletTag;
 
 extern Engine *pEngine;                                    //游戏引擎
