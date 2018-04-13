@@ -62,7 +62,7 @@ void PlayerDoDraw(Sprite *pSprite);                     //执行玩家绘制
 void PlayerDoEvents(Sprite *pSprite);                   //执行玩家事件
 
 PlayerTag *CreatePlayerTag();                            //创建玩家信息
-Sprite *CreateBullet();                                   //创建子弹
+Sprite *CreateBullet(int x,int y,int vx,int vy);       //创建子弹
 
 void BulletDoInit(Sprite *pSprite);                     //子弹初始化
 void BulletDoCal(Sprite *pSprite);                       //子弹计算

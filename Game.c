@@ -23,6 +23,7 @@ Texture *pAboutBackgroundTexture;
 Scene *pGameScene;
 Texture *pCurPlayerTexture;
 Texture *pPlayerTexture[2];
+Texture *pBulletTexture;
 Sprite *pPlayer;
 PlayerTag *pPlayerTag;
 
@@ -113,7 +114,15 @@ void InitGame()
     pPlayerTag->x=(WND_W-PLAYER_W)/2;
     pPlayerTag->y=50;
 
+    pBulletTexture=CreateTexture();
+
+    LoadTexture(pBulletTexture,"res/Bullet.RGBA");
+
     pGameScene->AddSprite(pGameScene,pPlayer);
+
+    Sprite *pBullet=CreateBullet(100,100,1,1);
+
+    pGameScene->AddSprite(pGameScene,pBullet);
 }
 
 void MainMenuSceneDoCal(Scene *pScene)
@@ -407,7 +416,10 @@ void BulletDoCal(Sprite *pSprite)
 
 void BulletDoDraw(Sprite *pSprite)
 {
+    BulletTag *pTag=pSprite->pTag;
 
+    ShowImage(pBulletTexture,pTag->x,pTag->y,
+              pBulletTexture->Width,pBulletTexture->Height);
 }
 
 void BulletDoEvents(Sprite *pSprite)
