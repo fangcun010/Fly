@@ -75,6 +75,8 @@ PlayerTag *CreatePlayerTag();                            //创建玩家信息
 Sprite *CreateBullet(int x,int y,int vx,int vy);       //创建子弹
 Sprite *CreateEnemey(Texture *pTexture,int HP          //创建敌人
                      ,int x,int y,int vx,int vy);
+Sprite *CreateEnemyBullet(int x,int y,                  //创建敌人子弹
+                            int vx,int vy);
 
 void BulletDoInit(Sprite *pSprite);                     //子弹初始化
 void BulletDoCal(Sprite *pSprite);                       //子弹计算
@@ -85,6 +87,11 @@ void EnemyDoInit(Sprite *pSprite);                      //执行初始化
 void EnemyDoCal(Sprite *pSprite);                       //执行计算
 void EnemyDoDraw(Sprite *pSprite);                      //执行绘制
 void EnemyDoEvents(Sprite *pSprite);                    //执行事件
+
+void EnemyBulletDoInit(Sprite *pSprite);                //执行敌人子弹初始化
+void EnemyBulletDoCal(Sprite *pSprite);                 //执行敌人子弹计算
+void EnemyBulletDoDraw(Sprite *pSprite);                //执行敌人子弹绘制
+void EnemyBulletDoEvents(Sprite *pSprite);              //执行敌人子弹事件
 
 void ResetKeyState();                                     //重置按键状态
 

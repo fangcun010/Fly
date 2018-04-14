@@ -24,6 +24,7 @@ Scene *pGameScene;
 Texture *pCurPlayerTexture;
 Texture *pPlayerTexture[2];
 Texture *pBulletTexture;
+Texture *pEnemyBulletTexture;
 Sprite *pPlayer;
 PlayerTag *pPlayerTag;
 Texture *pEnemy1Texture;
@@ -123,6 +124,9 @@ void InitGame()
 
     pEnemy1Texture=CreateTexture();
     LoadTexture(pEnemy1Texture,"res/Enemy1.RGBA");
+
+    pEnemyBulletTexture=CreateTexture();
+    LoadTexture(pEnemyBulletTexture,"res/EnemyBullet.RGBA");
 }
 
 void MainMenuSceneDoCal(Scene *pScene)
@@ -276,14 +280,25 @@ void GameSceneDoInit(Scene *pScene)
 {
 }
 
+static void AddEnemy1(void *pData)
+{
+    srand(time(NULL));
+    int x=rand()%(WND_W-pEnemy1Texture->Width);
+    Sprite *pEnemy=CreateEnemey(pEnemy1Texture,1,x,WND_H,0,-3);
+
+    pGameScene->AddSprite(pGameScene,pEnemy);
+}
+
 void GameSceneDoCal(Scene *pScene)
 {
     static unsigned long lasttime;
 
     SpriteManager *pM=pScene->pSpriteManager;
 
-    if(GetTickCount()-lasttime>800)
+    if(GetTickCount()-lasttime>2000)
     {
+        Call *pCall=CreateCall(AddEnemy1,NULL);
+        pCallManager->AddCall(pCallManager,pCall);
         lasttime=GetTickCount();
     }
 
@@ -508,17 +523,104 @@ void EnemyDoInit(Sprite *pSprite)
 
 }
 
+static void AddEnemyBullet(void *pData)
+{
+    Sprite *pSprite=pData;
+    EnemyTag *pTag=pSprite->pTag;
+
+    Sprite *pBullet=CreateEnemyBullet(pTag->x+38,pTag->y+5,0,-10);
+    pGameScene->AddSprite(pGameScene,pBullet);
+}
+
 void EnemyDoCal(Sprite *pSprite)
 {
+    static unsigned long lasttime;
+
+    EnemyTag *pTag=pSprite->pTag;
+
+    pTag->x+=pTag->vx;
+    pTag->y+=pTag->vy;
+
+    if(pTag->State==0)
+        if(GetTickCount()-lasttime>800)
+        {
+            Call *pCall=CreateCall(AddEnemyBullet,pSprite);
+
+            pCallManager->AddCall(pCallManager,pCall);
+            lasttime=GetTickCount();
+        }
+
 
 }
 
 void EnemyDoDraw(Sprite *pSprite)
 {
+    EnemyTag *pTag=pSprite->pTag;
 
+    ShowImage(pTag->pTexture,pTag->x,pTag->y,
+              pTag->pTexture->Width,pTag->pTexture->Height);
 }
 
 void EnemyDoEvents(Sprite *pSprite)
+{
+
+}
+
+Sprite *CreateEnemyBullet(int x,int y,int vx,int vy)
+{
+    Sprite *pSprite=CreateSprite();
+    BulletTag *pTag=malloc(sizeof(BulletTag));
+
+    pTag->x=x;pTag->y=y;
+    pTag->vx=vx;pTag->vy=vy;
+    pTag->bEnemy=TRUE;
+
+    pSprite->pTag=pTag;
+
+    pSprite->DoInit=EnemyBulletDoInit;
+    pSprite->DoCal=EnemyBulletDoCal;
+    pSprite->DoDraw=EnemyBulletDoDraw;
+    pSprite->DoEvents=EnemyBulletDoEvents;
+
+    return pSprite;
+}
+
+void EnemyBulletDoInit(Sprite *pSprite)
+{
+
+}
+
+static void RemoveEnemyBullet(void *pData)
+{
+    Sprite *pSprite=pData;
+
+    pGameScene->RemoveSprite(pGameScene,pSprite->ID);
+    DestorySprite(pSprite);
+}
+
+void EnemyBulletDoCal(Sprite *pSprite)
+{
+    BulletTag *pTag=pSprite->pTag;
+
+    pTag->x+=pTag->vx;
+    pTag->y+=pTag->vy;
+
+    if(pTag->x<-50 || pTag->x>WND_W+50 || pTag->y<-50 || pTag->y>WND_H+50)
+    {
+        Call *pCall=CreateCall(RemoveEnemyBullet,pSprite);
+        pCallManager->AddCall(pCallManager,pCall);
+    }
+}
+
+void EnemyBulletDoDraw(Sprite *pSprite)
+{
+    BulletTag *pTag=pSprite->pTag;
+
+    ShowImage(pEnemyBulletTexture,pTag->x,pTag->y,
+                pEnemyBulletTexture->Width,pEnemyBulletTexture->Height);
+}
+
+void EnemyBulletDoEvents(Sprite *pSprite)
 {
 
 }
