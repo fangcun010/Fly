@@ -181,6 +181,7 @@ Sprite *CreateSprite()
 
 void DestorySprite(Sprite *pSprite)
 {
+    if(pSprite->pTag) free(pSprite->pTag);
     free(pSprite);
 }
 
@@ -211,7 +212,11 @@ Sprite *SpriteManagerRemoveSprite(SpriteManager *pM,
     {
         Sprite *pSprite=vtGet(pVt,i);
 
-        if(pSprite->ID==ID) return pSprite;
+        if(pSprite->ID==ID)
+        {
+            vtRemove(pVt,i);
+            return pSprite;
+        }
     }
 
     return NULL;

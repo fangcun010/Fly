@@ -20,6 +20,14 @@ typedef struct tagPlayer                                  //玩家信息
     int State;                                              //状态
 } PlayerTag;
 
+typedef struct tagEnemy                                   //敌人信息
+{
+    int x,y;                                                //坐标
+    int State;                                              //状态
+    int HP;                                                 //生命值
+    Texture *pTexture;                                     //纹理
+} EnemyTag;
+
 typedef struct tagBullet                                  //子弹信息
 {
     int x,y;                                                //坐标

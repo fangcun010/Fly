@@ -281,9 +281,19 @@ void GameSceneDoCal(Scene *pScene)
 
 void GameSceneDoDraw(Scene *pScene)
 {
+    static unsigned long lasttime;
+    static int lastpos=0;
     SpriteManager *pM=pScene->pSpriteManager;
 
-    ShowImage(pBackgroundTexture,0,0,WND_W,WND_H);
+    if(GetTickCount()-lasttime>300)
+    {
+        lastpos-=5;
+
+        if(lastpos<=-WND_H) lastpos=0;
+    }
+
+    ShowImage(pBackgroundTexture,0,lastpos,WND_W,WND_H);
+    ShowImage(pBackgroundTexture,0,lastpos+WND_H,WND_W,WND_H);
 
     pM->DoDraw(pM);
 }
@@ -427,6 +437,7 @@ static void RemoveBullet(void *pData)
     Sprite *pSprite=pData;
 
     pGameScene->RemoveSprite(pGameScene,pSprite->ID);
+    DestorySprite(pSprite);
 }
 
 void BulletDoCal(Sprite *pSprite)
@@ -458,7 +469,44 @@ void BulletDoEvents(Sprite *pSprite)
 
 }
 
+Sprite *CreateEnemey(Texture *pTexture,int HP,int x,int y)
+{
+    Sprite *pSprite=CreateSprite();
+    EnemyTag *pTag=malloc(sizeof(EnemyTag));
+
+    pTag->HP=HP;
+    pTag->pTexture=pTexture;
+    pTag->State=0;
+    pTag->x=x;
+    pTag->y=y;
+
+    pSprite->pTag=pTag;
+
+    return pSprite;
+}
+
+void EnemeyDoInit(Sprite *pSprite)
+{
+
+}
+
+void EnemeyDoCal(Sprite *pSprite)
+{
+
+}
+
+void EnemyDoDraw(Sprite *pSprite)
+{
+
+}
+
+void EnemyDoEvents(Sprite *pSprite)
+{
+
+}
+
 void ResetKeyState()
 {
     memset(KeyState,0,sizeof(KeyState));
 }
+

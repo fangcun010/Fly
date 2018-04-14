@@ -8,4 +8,5 @@
 ../png2RGBA SetGameScene.png SetGameScene.RGBA
 ../png2RGBA Player1.png Player1.RGBA
 ../png2RGBA Player2.png Player2.RGBA
+../png2RGBA Enemy1.png Enemy1.RGBA
 ../png2RGBA Bullet.png Bullet.RGBA
