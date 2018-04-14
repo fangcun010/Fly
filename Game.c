@@ -29,6 +29,8 @@ Sprite *pPlayer;
 PlayerTag *pPlayerTag;
 Texture *pEnemy1Texture;
 
+Texture *pMaskTexture;
+
 int KeyState[256];
 
 void InitGame()
@@ -127,6 +129,9 @@ void InitGame()
 
     pEnemyBulletTexture=CreateTexture();
     LoadTexture(pEnemyBulletTexture,"res/EnemyBullet.RGBA");
+
+    pMaskTexture=CreateTexture();
+    LoadTexture(pMaskTexture,"res/Mask.RGBA");
 }
 
 void MainMenuSceneDoCal(Scene *pScene)
@@ -311,11 +316,13 @@ void GameSceneDoDraw(Scene *pScene)
     static int lastpos=0;
     SpriteManager *pM=pScene->pSpriteManager;
 
-    if(GetTickCount()-lasttime>300)
+    if(GetTickCount()-lasttime>50)
     {
         lastpos-=5;
 
         if(lastpos<=-WND_H) lastpos=0;
+
+        lasttime=GetTickCount();
     }
 
     ShowImage(pBackgroundTexture,0,lastpos,WND_W,WND_H);
@@ -397,6 +404,9 @@ void PlayerDoDraw(Sprite *pSprite)
         }
         ShowImage(pPlayerTexture[index],pPlayerTag->x,pPlayerTag->y
                 ,PLAYER_W,PLAYER_H);
+
+        ShowImage(pMaskTexture,pPlayerTag->x,pPlayerTag->y,
+                  PLAYER_W,PLAYER_H/2);
     }
 }
 
@@ -611,6 +621,12 @@ static void RemoveEnemyBullet(void *pData)
     DestorySprite(pSprite);
 }
 
+static void EnemyBulletHitPlayer(void *pData)
+{
+    pPlayerTag->State=1;
+    puts("hit");
+}
+
 void EnemyBulletDoCal(Sprite *pSprite)
 {
     BulletTag *pTag=pSprite->pTag;
@@ -621,6 +637,12 @@ void EnemyBulletDoCal(Sprite *pSprite)
     if(pTag->x<-50 || pTag->x>WND_W+50 || pTag->y<-50 || pTag->y>WND_H+50)
     {
         Call *pCall=CreateCall(RemoveEnemyBullet,pSprite);
+        pCallManager->AddCall(pCallManager,pCall);
+    }
+
+    if(pPlayerTag->State==0 && IsInRect(pTag->x,pTag->y,pPlayerTag->x,pPlayerTag->y,PLAYER_W,PLAYER_H/2))
+    {
+        Call *pCall=CreateCall(EnemyBulletHitPlayer,pSprite);
         pCallManager->AddCall(pCallManager,pCall);
     }
 }
