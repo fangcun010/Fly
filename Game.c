@@ -500,6 +500,7 @@ Sprite *CreateEnemey(Texture *pTexture,int HP,int x,int y,int vx,int vy)
     Sprite *pSprite=CreateSprite();
     EnemyTag *pTag=malloc(sizeof(EnemyTag));
 
+    pTag->lasttime=GetTickCount();
     pTag->HP=HP;
     pTag->pTexture=pTexture;
     pTag->State=0;
@@ -532,25 +533,37 @@ static void AddEnemyBullet(void *pData)
     pGameScene->AddSprite(pGameScene,pBullet);
 }
 
+static void RemoveEnemy(void *pData)
+{
+    Sprite *pSprite=pData;
+
+    pGameScene->RemoveSprite(pGameScene,pSprite->ID);
+    DestorySprite(pSprite);
+}
+
 void EnemyDoCal(Sprite *pSprite)
 {
-    static unsigned long lasttime;
-
     EnemyTag *pTag=pSprite->pTag;
 
     pTag->x+=pTag->vx;
     pTag->y+=pTag->vy;
 
     if(pTag->State==0)
-        if(GetTickCount()-lasttime>800)
+        if(GetTickCount()-pTag->lasttime>800)
         {
             Call *pCall=CreateCall(AddEnemyBullet,pSprite);
 
             pCallManager->AddCall(pCallManager,pCall);
-            lasttime=GetTickCount();
+            pTag->lasttime=GetTickCount();
         }
 
+    if(pTag->x<=-200 || pTag->y>=WND_W+200 ||
+        pTag->y<=-200 || pTag->y>=WND_H+200)
+    {
+        Call *pCall=CreateCall(RemoveEnemy,pSprite);
 
+        pCallManager->AddCall(pCallManager,pCall);
+    }
 }
 
 void EnemyDoDraw(Sprite *pSprite)
