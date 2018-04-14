@@ -23,6 +23,7 @@ typedef struct tagPlayer                                  //玩家信息
 typedef struct tagEnemy                                   //敌人信息
 {
     int x,y;                                                //坐标
+    int vx,vy;
     int State;                                              //状态
     int HP;                                                 //生命值
     Texture *pTexture;                                     //纹理
@@ -72,11 +73,18 @@ void PlayerDoEvents(Sprite *pSprite);                   //执行玩家事件
 
 PlayerTag *CreatePlayerTag();                            //创建玩家信息
 Sprite *CreateBullet(int x,int y,int vx,int vy);       //创建子弹
+Sprite *CreateEnemey(Texture *pTexture,int HP          //创建敌人
+                     ,int x,int y,int vx,int vy);
 
 void BulletDoInit(Sprite *pSprite);                     //子弹初始化
 void BulletDoCal(Sprite *pSprite);                       //子弹计算
 void BulletDoDraw(Sprite *pSprite);                     //子弹绘制
 void BulletDoEvents(Sprite *pSprite);                   //子弹处理事件
+
+void EnemyDoInit(Sprite *pSprite);                      //执行初始化
+void EnemyDoCal(Sprite *pSprite);                       //执行计算
+void EnemyDoDraw(Sprite *pSprite);                      //执行绘制
+void EnemyDoEvents(Sprite *pSprite);                    //执行事件
 
 void ResetKeyState();                                     //重置按键状态
 

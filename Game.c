@@ -26,6 +26,7 @@ Texture *pPlayerTexture[2];
 Texture *pBulletTexture;
 Sprite *pPlayer;
 PlayerTag *pPlayerTag;
+Texture *pEnemy1Texture;
 
 int KeyState[256];
 
@@ -119,6 +120,9 @@ void InitGame()
     LoadTexture(pBulletTexture,"res/Bullet.RGBA");
 
     pGameScene->AddSprite(pGameScene,pPlayer);
+
+    pEnemy1Texture=CreateTexture();
+    LoadTexture(pEnemy1Texture,"res/Enemy1.RGBA");
 }
 
 void MainMenuSceneDoCal(Scene *pScene)
@@ -274,7 +278,14 @@ void GameSceneDoInit(Scene *pScene)
 
 void GameSceneDoCal(Scene *pScene)
 {
+    static unsigned long lasttime;
+
     SpriteManager *pM=pScene->pSpriteManager;
+
+    if(GetTickCount()-lasttime>800)
+    {
+        lasttime=GetTickCount();
+    }
 
     pM->DoCal(pM);
 }
@@ -469,7 +480,7 @@ void BulletDoEvents(Sprite *pSprite)
 
 }
 
-Sprite *CreateEnemey(Texture *pTexture,int HP,int x,int y)
+Sprite *CreateEnemey(Texture *pTexture,int HP,int x,int y,int vx,int vy)
 {
     Sprite *pSprite=CreateSprite();
     EnemyTag *pTag=malloc(sizeof(EnemyTag));
@@ -479,18 +490,25 @@ Sprite *CreateEnemey(Texture *pTexture,int HP,int x,int y)
     pTag->State=0;
     pTag->x=x;
     pTag->y=y;
+    pTag->vx=vx;
+    pTag->vy=vy;
 
     pSprite->pTag=pTag;
+
+    pSprite->DoInit=EnemyDoInit;
+    pSprite->DoCal=EnemyDoCal;
+    pSprite->DoDraw=EnemyDoDraw;
+    pSprite->DoEvents=EnemyDoEvents;
 
     return pSprite;
 }
 
-void EnemeyDoInit(Sprite *pSprite)
+void EnemyDoInit(Sprite *pSprite)
 {
 
 }
 
-void EnemeyDoCal(Sprite *pSprite)
+void EnemyDoCal(Sprite *pSprite)
 {
 
 }
