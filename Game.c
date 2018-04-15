@@ -28,6 +28,8 @@ Texture *pEnemyBulletTexture;
 Sprite *pPlayer;
 PlayerTag *pPlayerTag;
 Texture *pEnemy1Texture;
+Texture *pBomb1Texture;
+Texture *pBomb2Texture;
 
 Texture *pMaskTexture;
 
@@ -129,6 +131,11 @@ void InitGame()
 
     pEnemyBulletTexture=CreateTexture();
     LoadTexture(pEnemyBulletTexture,"res/EnemyBullet.RGBA");
+
+    pBomb1Texture=CreateTexture();
+    LoadTexture(pBomb1Texture,"res/Bomb1.RGBA");
+    pBomb2Texture=CreateTexture();
+    LoadTexture(pBomb2Texture,"res/Bomb2.RGBA");
 
     pMaskTexture=CreateTexture();
     LoadTexture(pMaskTexture,"res/Mask.RGBA");
@@ -353,6 +360,8 @@ static void PlayerUseBullet(void *pData)
 
 void PlayerDoCal(Sprite *pSprite)
 {
+    if(pPlayerTag->State!=0) return;
+
     if(KeyState[KEY_LEFT])
     {
         pPlayerTag->x-=5;
@@ -392,22 +401,16 @@ void PlayerDoDraw(Sprite *pSprite)
 {
     static unsigned long lasttime;
 
-    if(pPlayerTag->State==0)
+    static int index=0;
+
+    if(GetTickCount()-lasttime>100)
     {
-        static int index=0;
-
-        if(GetTickCount()-lasttime>100)
-        {
-            index++;
-            index%=2;
-            lasttime=GetTickCount();
-        }
-        ShowImage(pPlayerTexture[index],pPlayerTag->x,pPlayerTag->y
-                ,PLAYER_W,PLAYER_H);
-
-        ShowImage(pMaskTexture,pPlayerTag->x,pPlayerTag->y,
-                  PLAYER_W,PLAYER_H/2);
+        index++;
+        index%=2;
+        lasttime=GetTickCount();
     }
+    ShowImage(pPlayerTexture[index],pPlayerTag->x,pPlayerTag->y
+                ,PLAYER_W,PLAYER_H);
 }
 
 void PlayerDoEvents(Sprite *pSprite)
@@ -594,6 +597,7 @@ Sprite *CreateEnemyBullet(int x,int y,int vx,int vy)
     Sprite *pSprite=CreateSprite();
     BulletTag *pTag=malloc(sizeof(BulletTag));
 
+    pTag->State=0;
     pTag->x=x;pTag->y=y;
     pTag->vx=vx;pTag->vy=vy;
     pTag->bEnemy=TRUE;
@@ -623,27 +627,45 @@ static void RemoveEnemyBullet(void *pData)
 
 static void EnemyBulletHitPlayer(void *pData)
 {
+    Sprite *pSprite=pData;
+    BulletTag *pTag=pSprite->pTag;
+
     pPlayerTag->State=1;
-    puts("hit");
+    pTag->State=1;
 }
 
 void EnemyBulletDoCal(Sprite *pSprite)
 {
     BulletTag *pTag=pSprite->pTag;
 
-    pTag->x+=pTag->vx;
-    pTag->y+=pTag->vy;
-
-    if(pTag->x<-50 || pTag->x>WND_W+50 || pTag->y<-50 || pTag->y>WND_H+50)
+    if(pTag->State==0)
     {
-        Call *pCall=CreateCall(RemoveEnemyBullet,pSprite);
-        pCallManager->AddCall(pCallManager,pCall);
+        pTag->x+=pTag->vx;
+        pTag->y+=pTag->vy;
+
+        if(pTag->x<-50 || pTag->x>WND_W+50 || pTag->y<-50 || pTag->y>WND_H+50)
+        {
+            Call *pCall=CreateCall(RemoveEnemyBullet,pSprite);
+            pCallManager->AddCall(pCallManager,pCall);
+        }
+
+        if(pPlayerTag->State==0 && IsInRect(pTag->x,pTag->y,pPlayerTag->x,pPlayerTag->y,PLAYER_W,PLAYER_H/2))
+        {
+            Call *pCall=CreateCall(EnemyBulletHitPlayer,pSprite);
+            pCallManager->AddCall(pCallManager,pCall);
+        }
     }
-
-    if(pPlayerTag->State==0 && IsInRect(pTag->x,pTag->y,pPlayerTag->x,pPlayerTag->y,PLAYER_W,PLAYER_H/2))
+    else if(pTag->State==1)
     {
-        Call *pCall=CreateCall(EnemyBulletHitPlayer,pSprite);
-        pCallManager->AddCall(pCallManager,pCall);
+        pTag->lasttime=GetTickCount();
+        pTag->State=2;
+    }
+    else if(pTag->State==2)
+    {
+        if(GetTickCount()-pTag->lasttime>800)
+        {
+            pTag->State=3;
+        }
     }
 }
 
@@ -651,8 +673,21 @@ void EnemyBulletDoDraw(Sprite *pSprite)
 {
     BulletTag *pTag=pSprite->pTag;
 
-    ShowImage(pEnemyBulletTexture,pTag->x,pTag->y,
+    if(pTag->State==0)
+    {
+        ShowImage(pEnemyBulletTexture,pTag->x,pTag->y,
                 pEnemyBulletTexture->Width,pEnemyBulletTexture->Height);
+    }
+    else if(pTag->State==1 || pTag->State==2)
+    {
+        ShowImage(pBomb1Texture,pTag->x-30,pTag->y-30,
+                  pBomb1Texture->Width,pBomb1Texture->Height);
+    }
+    else if(pTag->State==3)
+    {
+        ShowImage(pBomb2Texture,pTag->x-50,pTag->y-50,
+                  pBomb2Texture->Width,pBomb2Texture->Height);
+    }
 }
 
 void EnemyBulletDoEvents(Sprite *pSprite)

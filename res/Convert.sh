@@ -12,3 +12,5 @@
 ../png2RGBA Bullet.png Bullet.RGBA
 ../png2RGBA EnemyBullet.png EnemyBullet.RGBA
 ../png2RGBA Mask.png Mask.RGBA
+../png2RGBA Bomb1.png Bomb1.RGBA
+../png2RGBA Bomb2.png Bomb2.RGBA

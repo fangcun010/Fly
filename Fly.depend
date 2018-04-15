@@ -31,12 +31,12 @@
 
 1521872577 /home/renjie/Fly/MainMenu.h
 
-1523733326 source:/home/renjie/Fly/Game.c
+1523800249 source:/home/renjie/Fly/Game.c
 	<GL/gl.h>
 	"Engine.h"
 	"Game.h"
 
-1523719145 /home/renjie/Fly/Game.h
+1523800150 /home/renjie/Fly/Game.h
 	"Engine.h"
 
 1522840742 /home/renjie/Fly/Event.h
