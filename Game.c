@@ -527,6 +527,11 @@ void BulletDoCal(Sprite *pSprite)
     }
 }
 
+static void RemoveBulletEnemy(void *pData)
+{
+
+}
+
 void BulletDoDraw(Sprite *pSprite)
 {
     BulletTag *pTag=pSprite->pTag;
@@ -536,7 +541,23 @@ void BulletDoDraw(Sprite *pSprite)
               pBulletTexture->Width,pBulletTexture->Height);
     else if(pTag->State==1)
     {
-
+        pTag->lasttime=GetTickCount();
+        ShowImage(pBomb1Texture,pTag->x-30,pTag->y-30,
+                  pBomb1Texture->Width,pBomb1Texture->Height);
+        pTag->State=2;
+    }
+    else if(pTag->State==2)
+    {
+        if(GetTickCount()-pTag->lasttime<800)
+            ShowImage(pBomb1Texture,pTag->x-30,pTag->y-30,
+                  pBomb1Texture->Width,pBomb1Texture->Height);
+        else if(GetTickCount()-pTag->lasttime<1600)
+            ShowImage(pBomb2Texture,pTag->x-50,pTag->y-50,
+                  pBomb2Texture->Width,pBomb2Texture->Height);
+        else
+        {
+            Call *pCall=
+        }
     }
 }
 
