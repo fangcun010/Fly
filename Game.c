@@ -31,6 +31,8 @@ Texture *pEnemy1Texture;
 Texture *pBomb1Texture;
 Texture *pBomb2Texture;
 
+Vector *pEnemyVt;
+
 Texture *pMaskTexture;
 
 int KeyState[256];
@@ -139,6 +141,8 @@ void InitGame()
 
     pMaskTexture=CreateTexture();
     LoadTexture(pMaskTexture,"res/Mask.RGBA");
+
+    pEnemyVt=vtCreate();
 }
 
 void MainMenuSceneDoCal(Scene *pScene)
@@ -299,6 +303,8 @@ static void AddEnemy1(void *pData)
     Sprite *pEnemy=CreateEnemey(pEnemy1Texture,1,x,WND_H,0,-3);
 
     pGameScene->AddSprite(pGameScene,pEnemy);
+
+    vtAddBack(pEnemyVt,pEnemy);
 }
 
 void GameSceneDoCal(Scene *pScene)
@@ -453,6 +459,7 @@ Sprite *CreateBullet(int x,int y,int vx,int vy)
     Sprite *pSprite=CreateSprite();
     BulletTag *pBulletTag=malloc(sizeof(BulletTag));
 
+    pBulletTag->State=0;
     pBulletTag->x=x;pBulletTag->y=y;
     pBulletTag->vx=vx;pBulletTag->vy=vy;
 
@@ -479,28 +486,58 @@ static void RemoveBullet(void *pData)
     DestorySprite(pSprite);
 }
 
+static void BulletHit(void *pData)
+{
+
+}
+
 void BulletDoCal(Sprite *pSprite)
 {
     BulletTag *pTag=pSprite->pTag;
 
-    pTag->x+=pTag->vx;
-    pTag->y+=pTag->vy;
+    if(pTag->State==0)
+    {
+        pTag->x+=pTag->vx;
+        pTag->y+=pTag->vy;
 
-    if(pTag->y<-50 || pTag->y>WND_H+50 || pTag->x<-50 || pTag->x>WND_W+50)
+        for(int i=0;i<vtCount(pEnemyVt);i++)
+        {
+            Sprite *pSprite=vtGet(pEnemyVt,i);
+            EnemyTag *pEnemyTag=pSprite->pTag;
+
+            if(IsInRect(pTag->x,pTag->y,
+                        pEnemyTag->x,pEnemyTag->y+50,
+                        pEnemyTag->pTexture->Width,pEnemyTag->pTexture->Height/3))
+            {
+                Call *pCall=CreateCall(BulletHit,NULL);
+
+                pCallManager->AddCall(pCallManager,pCall);
+                pTag->State=1;
+
+                pEnemyTag->State=1;
+            }
+        }
+    }
+
+    if(pTag->State==0 && pTag->y<-50 || pTag->y>WND_H+50 || pTag->x<-50 || pTag->x>WND_W+50)
     {
         Call *pCall=CreateCall(RemoveBullet,pSprite);
 
         pCallManager->AddCall(pCallManager,pCall);
     }
-
 }
 
 void BulletDoDraw(Sprite *pSprite)
 {
     BulletTag *pTag=pSprite->pTag;
 
-    ShowImage(pBulletTexture,pTag->x,pTag->y,
+    if(pTag->State==0)
+        ShowImage(pBulletTexture,pTag->x,pTag->y,
               pBulletTexture->Width,pBulletTexture->Height);
+    else if(pTag->State==1)
+    {
+
+    }
 }
 
 void BulletDoEvents(Sprite *pSprite)
@@ -550,6 +587,17 @@ static void RemoveEnemy(void *pData)
 {
     Sprite *pSprite=pData;
 
+    for(int i=0;i<vtCount(pEnemyVt);i++)//从敌人列表中删除
+    {
+        Sprite *p=vtGet(pEnemyVt,i);
+
+        if(p->ID==pSprite->ID)
+        {
+            vtRemove(pEnemyVt,i);
+            break;
+        }
+    }
+
     pGameScene->RemoveSprite(pGameScene,pSprite->ID);
     DestorySprite(pSprite);
 }
@@ -558,10 +606,10 @@ void EnemyDoCal(Sprite *pSprite)
 {
     EnemyTag *pTag=pSprite->pTag;
 
-    pTag->x+=pTag->vx;
-    pTag->y+=pTag->vy;
-
     if(pTag->State==0)
+    {
+        pTag->x+=pTag->vx;
+        pTag->y+=pTag->vy;
         if(GetTickCount()-pTag->lasttime>800)
         {
             Call *pCall=CreateCall(AddEnemyBullet,pSprite);
@@ -569,6 +617,7 @@ void EnemyDoCal(Sprite *pSprite)
             pCallManager->AddCall(pCallManager,pCall);
             pTag->lasttime=GetTickCount();
         }
+    }
 
     if(pTag->x<=-200 || pTag->y>=WND_W+200 ||
         pTag->y<=-200 || pTag->y>=WND_H+200)
@@ -585,6 +634,9 @@ void EnemyDoDraw(Sprite *pSprite)
 
     ShowImage(pTag->pTexture,pTag->x,pTag->y,
               pTag->pTexture->Width,pTag->pTexture->Height);
+
+    ShowImage(pMaskTexture,pTag->x,pTag->y+50,
+              pTag->pTexture->Width,pTag->pTexture->Height/3);
 }
 
 void EnemyDoEvents(Sprite *pSprite)
