@@ -515,6 +515,7 @@ void BulletDoCal(Sprite *pSprite)
                 pTag->State=1;
 
                 pEnemyTag->State=1;
+                pTag->EnemyID=pSprite->ID;
             }
         }
     }
@@ -529,7 +530,11 @@ void BulletDoCal(Sprite *pSprite)
 
 static void RemoveBulletEnemy(void *pData)
 {
+    Sprite *pSprite=pData;
+    BulletTag *pTag=pSprite->pTag;
 
+    pGameScene->RemoveSprite(pGameScene,pSprite->ID);
+    pGameScene->RemoveSprite(pGameScene,pTag->EnemyID);
 }
 
 void BulletDoDraw(Sprite *pSprite)
@@ -556,7 +561,8 @@ void BulletDoDraw(Sprite *pSprite)
                   pBomb2Texture->Width,pBomb2Texture->Height);
         else
         {
-            Call *pCall=
+            Call *pCall=CreateCall(RemoveBulletEnemy,pSprite);
+            pCallManager->AddCall(pCallManager,pCall);
         }
     }
 }

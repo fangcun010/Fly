@@ -36,6 +36,7 @@ typedef struct tagBullet                                  //子弹信息
     int x,y;                                                //坐标
     int vx,vy;                                              //速度
     unsigned long lasttime;                               //上次时间
+    int EnemyID;
     BOOL bEnemy;                                            //是否是敌人的子弹
 } BulletTag;
 
