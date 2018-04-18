@@ -14,3 +14,4 @@
 ../png2RGBA Mask.png Mask.RGBA
 ../png2RGBA Bomb1.png Bomb1.RGBA
 ../png2RGBA Bomb2.png Bomb2.RGBA
+../png2RGBA SetGameScene.png SetGameScene.RGBA

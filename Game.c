@@ -37,6 +37,10 @@ Texture *pMaskTexture;
 
 int KeyState[256];
 
+//游戏死亡
+Scene *pGameOverScene;
+Texture *pGameOverTexture;
+
 void InitGame()
 {
     TextureManager *pTextureManager=pEngine->pTextureManager;
@@ -143,6 +147,8 @@ void InitGame()
     LoadTexture(pMaskTexture,"res/Mask.RGBA");
 
     pEnemyVt=vtCreate();
+
+    pGameOverScene=CreateScene();
 }
 
 void MainMenuSceneDoCal(Scene *pScene)
@@ -179,6 +185,9 @@ static void NewGame(void *pData)
 static void SetGame(void *pData)
 {
     puts("Set Game");
+    pMainMenuScene->bDoEvents=FALSE;
+
+    pSceneManager->AddScene(pSceneManager,pSetScene);
 }
 
 static void AboutGame(void *pData)
@@ -196,6 +205,21 @@ static void ExitGame(void *pData)
     pEngine->bLeaveLoop=TRUE;
 }
 
+void GameOverSceneDoCal(Scene *pScene)
+{
+
+}
+
+void GameOverSceneDoDraw(Scene *pScene)
+{
+
+}
+
+void GameOverSceneDoEvents(Scene *pScene)
+{
+
+}
+
 void SetGameSceneDoCal(Scene *pScene)
 {
 
@@ -203,12 +227,35 @@ void SetGameSceneDoCal(Scene *pScene)
 
 void SetGameSceneDoDraw(Scene *pScene)
 {
-    ShowImage(pBackgroundTexture,0,0,WND_W,WND_H);
+    ShowImage(pSetBackgroundTexture,100,250,
+                pSetBackgroundTexture->Width,pSetBackgroundTexture->Height);
+}
+
+static void RemoveSetScene(void *pData)
+{
+    Scene *pScene=pSceneManager->RemoveScene(pSceneManager,pSetScene->ID);
+    pMainMenuScene->bDoEvents=TRUE;
 }
 
 void SetGameSceneDoEvents(Scene *pScene)
 {
+    Vector *pVt=pEventManager->pEventVt;
 
+    for(int i=0;i<vtCount(pVt);i++)
+    {
+        Event *pEvent=vtGet(pVt,i);
+
+        if(pEvent->nEventID==EVENT_CLICK)
+        {
+            ClickEvent *pClickEvent=pEvent->pTag;
+
+            if(pClickEvent->bDown)
+            {
+                Call *pCall=CreateCall(RemoveSetScene,NULL);
+                pCallManager->AddCall(pCallManager,pCall);
+            }
+        }
+    }
 }
 
 void AboutGameSceneDoCal(Scene *pScene)
@@ -307,6 +354,15 @@ static void AddEnemy1(void *pData)
     vtAddBack(pEnemyVt,pEnemy);
 }
 
+static void EscGameMenu(void *pData)
+{
+    pSceneManager->RemoveScene(pSceneManager,pGameScene->ID);
+    pSceneManager->AddScene(pSceneManager,pMainMenuScene);
+    pCallManager->DestoryAllCalls(pCallManager);
+    ResetKeyState();
+}
+
+
 void GameSceneDoCal(Scene *pScene)
 {
     static unsigned long lasttime;
@@ -321,6 +377,12 @@ void GameSceneDoCal(Scene *pScene)
     }
 
     pM->DoCal(pM);
+
+    if(KeyState['q'])
+    {
+        Call *pCall=CreateCall(EscGameMenu,NULL);
+        pCallManager->AddCall(pCallManager,pCall);
+    }
 }
 
 void GameSceneDoDraw(Scene *pScene)
@@ -662,8 +724,8 @@ void EnemyDoDraw(Sprite *pSprite)
     ShowImage(pTag->pTexture,pTag->x,pTag->y,
               pTag->pTexture->Width,pTag->pTexture->Height);
 
-    ShowImage(pMaskTexture,pTag->x,pTag->y+50,
-              pTag->pTexture->Width,pTag->pTexture->Height/3);
+    //ShowImage(pMaskTexture,pTag->x,pTag->y+50,
+    //          pTag->pTexture->Width,pTag->pTexture->Height/3);
 }
 
 void EnemyDoEvents(Sprite *pSprite)
