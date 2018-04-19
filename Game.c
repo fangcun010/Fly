@@ -168,6 +168,11 @@ void InitGame()
     pTextureManager->AddTexture(pTextureManager,pGameOverTexture);
 }
 
+void InitNewGame()
+{
+    pEnemyVt->nCount=0;
+}
+
 void MainMenuSceneDoCal(Scene *pScene)
 {
   //  TextureManager *pM=pEngine->pTextureManager;
