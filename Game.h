@@ -99,4 +99,8 @@ void EnemyBulletDoEvents(Sprite *pSprite);              //执行敌人子弹事�
 
 void ResetKeyState();                                     //重置按键状态
 
+void GameOverSceneDoCal(Scene *pScene);
+void GameOverSceneDoDraw(Scene *pScene);
+void GameOverSceneDoEvents(Scene *pScene);
+
 #endif // GAME_H_INCLUDED

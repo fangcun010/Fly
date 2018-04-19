@@ -130,6 +130,8 @@ void InitGame()
 
     LoadTexture(pBulletTexture,"res/Bullet.RGBA");
 
+    pTextureManager->AddTexture(pTextureManager,pBulletTexture);
+
     pGameScene->AddSprite(pGameScene,pPlayer);
 
     pEnemy1Texture=CreateTexture();
@@ -138,17 +140,32 @@ void InitGame()
     pEnemyBulletTexture=CreateTexture();
     LoadTexture(pEnemyBulletTexture,"res/EnemyBullet.RGBA");
 
+    pTextureManager->AddTexture(pTextureManager,pEnemyBulletTexture);
+
     pBomb1Texture=CreateTexture();
     LoadTexture(pBomb1Texture,"res/Bomb1.RGBA");
     pBomb2Texture=CreateTexture();
     LoadTexture(pBomb2Texture,"res/Bomb2.RGBA");
 
+    pTextureManager->AddTexture(pTextureManager,pBomb1Texture);
+    pTextureManager->AddTexture(pTextureManager,pBomb2Texture);
+
     pMaskTexture=CreateTexture();
     LoadTexture(pMaskTexture,"res/Mask.RGBA");
+
+    pTextureManager->AddTexture(pTextureManager,pMaskTexture);
 
     pEnemyVt=vtCreate();
 
     pGameOverScene=CreateScene();
+    pGameOverScene->DoCal=GameOverSceneDoCal;
+    pGameOverScene->DoDraw=GameOverSceneDoDraw;
+    pGameOverScene->DoEvents=GameOverSceneDoEvents;
+
+    pGameOverTexture=CreateTexture();
+    LoadTexture(pGameOverTexture,"res/GameOver.RGBA");
+
+    pTextureManager->AddTexture(pTextureManager,pGameOverTexture);
 }
 
 void MainMenuSceneDoCal(Scene *pScene)
@@ -212,12 +229,46 @@ void GameOverSceneDoCal(Scene *pScene)
 
 void GameOverSceneDoDraw(Scene *pScene)
 {
+    ShowImage(pGameOverTexture,100,250,
+                pGameOverTexture->Width,pGameOverTexture->Height);
+}
 
+static void EscGameScene(void *pData)
+{
+    pSceneManager->RemoveScene(pSceneManager,pGameScene->ID);
+    pSceneManager->AddScene(pSceneManager,pMainMenuScene);
+    pCallManager->DestoryAllCalls(pCallManager);
+    ResetKeyState();
+}
+
+static void RemoveGameOver(void *pData)
+{
+    puts("RemoveGameOver");
+
+    pSceneManager->RemoveScene(pSceneManager,pGameOverScene->ID);
+    pGameOverScene->bDoEvents=TRUE;
+    EscGameScene(NULL);
 }
 
 void GameOverSceneDoEvents(Scene *pScene)
 {
+    Vector *pVt=pEventManager->pEventVt;
 
+    for(int i=0;i<vtCount(pVt);i++)
+    {
+        Event *pEvent=vtGet(pVt,i);
+
+        if(pEvent->nEventID==EVENT_CLICK)
+        {
+            ClickEvent *pClickEvent=pEvent->pTag;
+
+            if(pClickEvent->bDown)
+            {
+                Call *pCall=CreateCall(RemoveGameOver,NULL);
+                pCallManager->AddCall(pCallManager,pCall);
+            }
+        }
+    }
 }
 
 void SetGameSceneDoCal(Scene *pScene)
@@ -354,15 +405,6 @@ static void AddEnemy1(void *pData)
     vtAddBack(pEnemyVt,pEnemy);
 }
 
-static void EscGameMenu(void *pData)
-{
-    pSceneManager->RemoveScene(pSceneManager,pGameScene->ID);
-    pSceneManager->AddScene(pSceneManager,pMainMenuScene);
-    pCallManager->DestoryAllCalls(pCallManager);
-    ResetKeyState();
-}
-
-
 void GameSceneDoCal(Scene *pScene)
 {
     static unsigned long lasttime;
@@ -380,7 +422,7 @@ void GameSceneDoCal(Scene *pScene)
 
     if(KeyState['q'])
     {
-        Call *pCall=CreateCall(EscGameMenu,NULL);
+        Call *pCall=CreateCall(EscGameScene,NULL);
         pCallManager->AddCall(pCallManager,pCall);
     }
 }
@@ -408,6 +450,8 @@ void GameSceneDoDraw(Scene *pScene)
 
 void GameSceneDoEvents(Scene *pScene)
 {
+    if(pGameScene->bDoEvents==FALSE) return;
+
     SpriteManager *pM=pScene->pSpriteManager;
 
     pM->DoEvents(pM);
@@ -775,6 +819,15 @@ static void EnemyBulletHitPlayer(void *pData)
     pTag->State=1;
 }
 
+static void GameOver(void *pData)
+{
+    puts("GameOver");
+    pGameScene->bDoEvents=FALSE;
+
+    pSceneManager->AddScene(pSceneManager,pGameOverScene);
+
+}
+
 void EnemyBulletDoCal(Sprite *pSprite)
 {
     BulletTag *pTag=pSprite->pTag;
@@ -806,6 +859,16 @@ void EnemyBulletDoCal(Sprite *pSprite)
         if(GetTickCount()-pTag->lasttime>800)
         {
             pTag->State=3;
+            pTag->lasttime=GetTickCount();
+        }
+    }
+    else if(pTag->State==3)
+    {
+        if(GetTickCount()-pTag->lasttime>800)
+        {
+            Call *pCall=CreateCall(GameOver,NULL);
+            pCallManager->AddCall(pCallManager,pCall);
+            pTag->State=4;
         }
     }
 }
@@ -824,7 +887,7 @@ void EnemyBulletDoDraw(Sprite *pSprite)
         ShowImage(pBomb1Texture,pTag->x-30,pTag->y-30,
                   pBomb1Texture->Width,pBomb1Texture->Height);
     }
-    else if(pTag->State==3)
+    else if(pTag->State==3 || pTag->State==4)
     {
         ShowImage(pBomb2Texture,pTag->x-50,pTag->y-50,
                   pBomb2Texture->Width,pBomb2Texture->Height);
